@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment Variables & Secrets (NEVER COMMIT)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env.local
+
+# Firebase Credentials & Emulators
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+*service-account*.json
+serviceAccountKey.json
+*.pem
+*.key
+*.cert
+
+# Razorpay / Payment Secrets
+*razorpay*.key
+*payment*.secret
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+playwright-report/
+blob-report/
+test-results/
+
+# Operating System & IDE Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
+
+# Temporary & Cache files
+.turbo/
+.cache/
+tmp/
+scratch/

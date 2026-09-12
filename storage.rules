@@ -1,0 +1,58 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.role == 'admin' || request.auth.token.role == 'super_admin');
+    }
+
+    function isAllowedImage() {
+      return request.resource.contentType.matches('image/(jpeg|png|webp)') &&
+        request.resource.size < 5 * 1024 * 1024; // 5MB max
+    }
+
+    function isAllowedDocument() {
+      return (request.resource.contentType.matches('application/pdf') ||
+              request.resource.contentType.matches('image/(jpeg|png)')) &&
+        request.resource.size < 25 * 1024 * 1024; // 25MB max
+    }
+
+    // 1. User & Lawyer Public Profile Avatars
+    match /profiles/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isOwner(userId) && isAllowedImage();
+    }
+
+    // 2. Lawyer Confidential KYC Submissions (Sanad, PAN, Aadhaar)
+    match /lawyer-kyc/{lawyerUid}/{allPaths=**} {
+      allow read: if isOwner(lawyerUid) || isAdmin();
+      allow write: if isOwner(lawyerUid) && isAllowedDocument();
+    }
+
+    // 3. Client & Lawyer Confidential Booking Case Documents
+    match /booking-documents/{bookingId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isAllowedDocument();
+    }
+
+    // 4. Completed Legal Work & Final Registered Deeds
+    match /completed-documents/{bookingId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() || (isAuthenticated() && request.auth.token.role == 'lawyer');
+    }
+
+    // Fallback: Deny any other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@legalhub/functions",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@legalhub/types": "*",
+    "@legalhub/utils": "*",
+    "@legalhub/validation": "*",
+    "firebase-admin": "^12.1.1",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.7",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "legalhubmumbai-dev",
+    "development": "legalhubmumbai-dev",
+    "staging": "legalhubmumbai-staging",
+    "production": "legalhubmumbai-prod"
+  }
+}
