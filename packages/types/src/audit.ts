@@ -3,7 +3,9 @@ import { UserRole } from './auth';
 
 export type AuditAction =
   | 'user_login'
+  | 'lawyer_kyc_draft_saved'
   | 'lawyer_kyc_submitted'
+  | 'lawyer_kyc_updated'
   | 'lawyer_kyc_approved'
   | 'lawyer_kyc_rejected'
   | 'booking_created'

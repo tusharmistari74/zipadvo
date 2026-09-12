@@ -11,11 +11,13 @@ export type PracticeArea =
   | 'Civil & Property Litigation';
 
 export type LawyerKYCStatus =
-  | 'unverified'
+  | 'draft'
   | 'submitted'
   | 'under_review'
   | 'verified'
-  | 'rejected';
+  | 'rejected'
+  | 'suspended'
+  | 'unverified';
 
 export type MumbaiCourt =
   | 'Bombay High Court'
@@ -78,3 +80,46 @@ export interface LawyerProfile extends BaseEntity {
   totalConsultationsCompleted: number;
   availabilitySchedule?: LawyerAvailabilitySlot[];
 }
+
+export interface LawyerOnboardingDraft {
+  currentStep: number;
+  lastSavedAt: string;
+  personalInfo?: {
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    avatarUrl?: string;
+  };
+  professionalInfo?: {
+    sanadNumber?: string;
+    enrollmentYear?: number;
+    stateBarCouncil?: string;
+    primaryCourt?: MumbaiCourt;
+    additionalCourts?: string[];
+  };
+  specializationInfo?: {
+    title?: string;
+    bio?: string;
+    practiceAreas?: PracticeArea[];
+    yearsOfExperience?: number;
+    spokenLanguages?: string[];
+  };
+  chamberAndFees?: {
+    officeAddress?: MumbaiAddress;
+    consultationFeeInr?: number;
+    isAcceptingBookings?: boolean;
+  };
+  availability?: {
+    availabilitySchedule?: LawyerAvailabilitySlot[];
+  };
+  kycDocuments?: {
+    panNumber?: string;
+    panCardStoragePath?: string;
+    aadhaarLastFour?: string;
+    aadhaarProofStoragePath?: string;
+    sanadNumber?: string;
+    sanadCertificateStoragePath?: string;
+    officeProofStoragePath?: string;
+  };
+}
+
