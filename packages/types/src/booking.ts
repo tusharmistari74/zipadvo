@@ -21,6 +21,38 @@ export interface BookingTimelineEvent {
   notes?: string;
 }
 
+export interface TimeSlotItem {
+  id: string; // e.g. "10:00-11:00"
+  startTime: string; // "10:00"
+  endTime: string; // "11:00"
+  isAvailable: boolean;
+  reason?: 'booked' | 'break' | 'past' | 'blocked' | 'notice_period' | 'unavailable_day';
+  breakLabel?: string;
+}
+
+export interface DateAvailabilitySummary {
+  date: string; // YYYY-MM-DD
+  isBlocked: boolean;
+  blockedReason?: string;
+  isWorkingDay: boolean;
+  availableSlotCount: number;
+  totalSlotCount: number;
+  slots: TimeSlotItem[];
+}
+
+export interface SlotReservation extends BaseEntity {
+  id: string; // composite key: `${date}_${slotId}`
+  lawyerUid: string;
+  date: string; // YYYY-MM-DD
+  slotId: string; // e.g. "10:00-11:00"
+  startTime: string;
+  endTime: string;
+  clientUid: string;
+  bookingId?: string;
+  status: 'reserved' | 'confirmed' | 'released';
+  expiresAt?: string; // For temporary reservations during checkout
+}
+
 export interface Booking extends BaseEntity {
   id: string;
   bookingReferenceNumber: string; // e.g. LHM-2026-XXXX
@@ -44,3 +76,4 @@ export interface Booking extends BaseEntity {
   meetingLink?: string;
   cancellationReason?: string;
 }
+

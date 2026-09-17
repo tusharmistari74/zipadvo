@@ -59,6 +59,50 @@ export interface LawyerAvailabilitySlot {
   isAvailable: boolean;
 }
 
+export interface BreakInterval {
+  id: string;
+  label: string; // e.g., 'Lunch Recess', 'High Court Bench Hearing'
+  startTime: string; // 'HH:mm' 24h
+  endTime: string; // 'HH:mm' 24h
+}
+
+export interface DaySchedule {
+  dayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6; // 0=Sunday, 1=Monday ... 6=Saturday
+  isAvailable: boolean;
+  startTime: string; // 'HH:mm' e.g. '10:00'
+  endTime: string; // 'HH:mm' e.g. '19:00'
+  breaks: BreakInterval[];
+}
+
+export interface BlockedDate {
+  id: string;
+  date: string; // YYYY-MM-DD
+  reason: string; // e.g., 'Bombay High Court Summer Vacation', 'Personal Leave', 'Public Holiday'
+  createdAt?: string;
+}
+
+export interface SpecialDateSchedule {
+  id: string;
+  date: string; // YYYY-MM-DD
+  isAvailable: boolean;
+  startTime?: string;
+  endTime?: string;
+  breaks?: BreakInterval[];
+  note?: string;
+}
+
+export interface LawyerAvailabilityConfig {
+  timezone: string; // 'Asia/Kolkata' default
+  slotDurationMinutes: number; // 30, 45, 60 mins (default 60)
+  bufferMinutes: number; // buffer between slots (default 0 or 15)
+  advanceBookingDays: number; // Max days in advance clients can book (default 14 or 30)
+  minimumNoticeHours: number; // Min hours before slot start time (default 2)
+  weeklySchedule: DaySchedule[];
+  blockedDates: BlockedDate[];
+  specialDates: SpecialDateSchedule[];
+  updatedAt?: string;
+}
+
 export interface LawyerProfile extends BaseEntity {
   uid: string;
   fullName: string;
@@ -79,6 +123,7 @@ export interface LawyerProfile extends BaseEntity {
   reviewCount: number;
   totalConsultationsCompleted: number;
   availabilitySchedule?: LawyerAvailabilitySlot[];
+  availabilityConfig?: LawyerAvailabilityConfig;
 }
 
 export interface LawyerOnboardingDraft {
