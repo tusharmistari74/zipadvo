@@ -18,7 +18,9 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     case 'resolved_dismissed':
       variant = 'success';
       break;
+    case 'pending_payment':
     case 'pending_unlock_payment':
+    case 'pending_lawyer':
     case 'submitted':
     case 'under_review':
     case 'under_investigation':
@@ -26,12 +28,14 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     case 'authorized':
       variant = 'warning';
       break;
+    case 'confirmed':
     case 'unlocked':
     case 'accepted':
     case 'in_progress':
       variant = 'brand';
       break;
     case 'rejected':
+    case 'cancelled':
     case 'cancelled_by_client':
     case 'cancelled_by_lawyer':
     case 'failed':
@@ -48,10 +52,16 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   }
 
   // Format nice human-readable labels
-  if (status === 'pending_unlock_payment') label = 'Pending ₹299 Unlock';
+  if (status === 'pending_payment' || status === 'pending_unlock_payment') label = 'Pending ₹299 Unlock';
+  if (status === 'pending_lawyer') label = 'Awaiting Lawyer';
+  if (status === 'confirmed' || status === 'accepted') label = 'Confirmed Slot';
+  if (status === 'in_progress') label = 'Consultation Active';
+  if (status === 'completed') label = 'Completed';
+  if (status === 'cancelled') label = 'Cancelled';
   if (status === 'unlocked') label = 'Consultation Unlocked';
   if (status === 'under_review') label = 'KYC Under Review';
   if (status === 'verified') label = 'Bar Council Verified';
+
 
   return (
     <Badge variant={variant} className={className}>

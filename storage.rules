@@ -37,6 +37,10 @@ service firebase.storage {
       allow read: if isOwner(lawyerUid) || isAdmin();
       allow write: if isOwner(lawyerUid) && isAllowedDocument();
     }
+    match /lawyer_kyc/{lawyerUid}/{allPaths=**} {
+      allow read: if isOwner(lawyerUid) || isAdmin();
+      allow write: if isOwner(lawyerUid) && isAllowedDocument();
+    }
 
     // 3. Client & Lawyer Confidential Booking Case Documents
     match /booking-documents/{bookingId}/{allPaths=**} {

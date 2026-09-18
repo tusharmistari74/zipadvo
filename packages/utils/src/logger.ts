@@ -86,10 +86,33 @@ export function sanitizeLogData(data: unknown, depth = 0): unknown {
   return String(data);
 }
 
+function outputLog(isError: boolean, jsonString: string): void {
+  try {
+    if (typeof process !== 'undefined' && (isError ? process.stderr : process.stdout)) {
+      if (isError) {
+        process.stderr.write(jsonString + '\n');
+      } else {
+        process.stdout.write(jsonString + '\n');
+      }
+      return;
+    }
+  } catch {
+    // Fall through to console
+  }
+
+  if (isError) {
+    // eslint-disable-next-line no-console
+    console.error(jsonString);
+  } else {
+    // eslint-disable-next-line no-console
+    console.log(jsonString);
+  }
+}
+
 export class Logger {
   private namespace: string;
 
-  constructor(namespace = 'App') {
+  constructor(namespace = 'LegalHubMumbai') {
     this.namespace = namespace;
   }
 
@@ -109,13 +132,12 @@ export class Logger {
 
   public info(message: string, context?: LogContext): void {
     const entry = this.formatEntry('info', message, context);
-    // In production, this can pipe into Cloud Logging / Datadog
-    process.stdout.write(JSON.stringify(entry) + '\n');
+    outputLog(false, JSON.stringify(entry));
   }
 
   public warn(message: string, context?: LogContext): void {
     const entry = this.formatEntry('warn', message, context);
-    process.stderr.write(JSON.stringify(entry) + '\n');
+    outputLog(true, JSON.stringify(entry));
   }
 
   public error(message: string, error?: unknown, context?: LogContext): void {
@@ -135,7 +157,7 @@ export class Logger {
       ...(errorDetails ? { error: errorDetails } : {}),
     });
 
-    process.stderr.write(JSON.stringify(entry) + '\n');
+    outputLog(true, JSON.stringify(entry));
   }
 
   public child(subNamespace: string): Logger {

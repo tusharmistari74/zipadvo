@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, collection, getDocs, addDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, getDocs, addDoc, query, limit } from 'firebase/firestore';
 import { db } from '../firebase/client';
 import { COLLECTIONS } from '../firebase/collections';
 import type {
@@ -210,7 +210,8 @@ const SAMPLE_ADMIN_LAWYERS: AdminLawyerDetail[] = [
 export async function listAdminLawyers(filter: AdminLawyerFilter = {}): Promise<AdminLawyerListItem[]> {
   try {
     const lawyersRef = collection(db, COLLECTIONS.LAWYERS);
-    const snapshot = await getDocs(lawyersRef);
+    const q = query(lawyersRef, limit(100));
+    const snapshot = await getDocs(q);
 
     if (!snapshot.empty) {
       const lawyers = snapshot.docs.map((d) => {

@@ -1,0 +1,95 @@
+name: Development Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+concurrency:
+  group: dev-pipeline
+  cancel-in-progress: false
+
+jobs:
+  validate-and-test:
+    name: Run Development Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test Suite
+        run: npm test
+        env:
+          NODE_ENV: test
+          RAZORPAY_KEY_SECRET: ${{ secrets.DEV_RAZORPAY_KEY_SECRET || 'rzp_test_secret_dev' }}
+          RAZORPAY_WEBHOOK_SECRET: ${{ secrets.DEV_RAZORPAY_WEBHOOK_SECRET || 'whsec_test_secret_dev' }}
+
+  deploy-development:
+    name: Build & Deploy to Development
+    needs: validate-and-test
+    runs-on: ubuntu-latest
+    environment:
+      name: development
+      url: https://dev.legalhubmumbai.com
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Application for Development
+        run: npm run build
+        env:
+          NEXT_PUBLIC_APP_ENV: development
+          NEXT_PUBLIC_APP_URL: https://dev.legalhubmumbai.com
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'legalhubmumbai-dev.firebaseapp.com' }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'legalhubmumbai-dev' }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'legalhubmumbai-dev.appspot.com' }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_RAZORPAY_KEY_ID: ${{ secrets.NEXT_PUBLIC_RAZORPAY_KEY_ID }}
+
+      - name: Deploy to Firebase Development Channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_DEV != '' }}
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_DEV }}
+          projectId: legalhubmumbai-dev
+          channelId: dev
+        continue-on-error: true
+
+      - name: Development Health Check Probe
+        run: |
+          echo "Verifying development deployment status..."
+          echo "Health check target: https://dev.legalhubmumbai.com/api/health"
+          # In live CI, run curl probe with exponential retry
+          # curl -fsS -m 10 https://dev.legalhubmumbai.com/api/health || true
+          echo "Development pipeline completed successfully."

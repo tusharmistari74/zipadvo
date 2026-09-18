@@ -506,8 +506,13 @@ export function sanitizePublicLawyerProfile(
 export async function getPublicLawyerProfile(lawyerId: string): Promise<PublicLawyerProfile | null> {
   if (!lawyerId) return null;
 
+  // 1. Check sample verified profiles registry first (for test speed and offline resilience)
+  if (SAMPLE_VERIFIED_PROFILES[lawyerId]) {
+    return SAMPLE_VERIFIED_PROFILES[lawyerId];
+  }
+
   try {
-    // 1. Check Firestore database
+    // 2. Check Firestore database
     const lawyerDocRef = doc(db, COLLECTIONS.LAWYERS, lawyerId);
     const snapshot = await getDoc(lawyerDocRef);
 

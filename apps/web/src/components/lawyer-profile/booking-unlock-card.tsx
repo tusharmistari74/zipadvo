@@ -1,5 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
+'use client';
+
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@legalhub/ui';
 import {
   Lock,
@@ -9,12 +10,14 @@ import {
 } from 'lucide-react';
 import { formatINR } from '@legalhub/utils';
 import type { PublicLawyerProfile } from '../../lib/services/lawyer-profile.service';
+import { BookingModal } from '../booking/booking-modal';
 
 interface BookingUnlockCardProps {
   profile: PublicLawyerProfile;
 }
 
 export function BookingUnlockCard({ profile }: BookingUnlockCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const facilitationFee = 299;
 
   return (
@@ -85,20 +88,19 @@ export function BookingUnlockCard({ profile }: BookingUnlockCardProps) {
 
           {/* Primary Unlock CTA */}
           <div className="space-y-2">
-            <Link href={`/login?redirect=/lawyers/${profile.id}`}>
-              <Button
-                variant="primary"
-                fullWidth
-                size="lg"
-                rightIcon={<ArrowRight className="h-4 w-4" />}
-                className="shadow-sm font-semibold"
-              >
-                Unlock Contact for {formatINR(facilitationFee)}
-              </Button>
-            </Link>
+            <Button
+              variant="primary"
+              fullWidth
+              size="lg"
+              onClick={() => setIsModalOpen(true)}
+              rightIcon={<ArrowRight className="h-4 w-4" />}
+              className="shadow-sm font-semibold bg-emerald-600 hover:bg-emerald-700 border-none"
+            >
+              Book & Unlock for {formatINR(facilitationFee)}
+            </Button>
             <p className="text-[11px] text-slate-500 text-center flex items-center justify-center gap-1">
               <Lock className="h-3 w-3 text-slate-400" />
-              Secure 256-Bit Encrypted Facilitation
+              Direct Mumbai advocate booking with instant slot lock
             </p>
           </div>
         </CardContent>
@@ -129,6 +131,14 @@ export function BookingUnlockCard({ profile }: BookingUnlockCardProps) {
           LegalHubMumbai is a technology intermediary and not a law firm. Lawyer profiles are listed for factual reference in compliance with Bar Council of India Rule 36.
         </p>
       </div>
+
+      {/* Booking Modal */}
+      <BookingModal
+        lawyer={profile}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
+

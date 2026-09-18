@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../../lib/auth/context';
 import type { UserRole } from '@legalhub/types';
 import { Container, Card, CardContent } from '@legalhub/ui';
@@ -14,13 +14,29 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, role } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isAdminOnlyRoute = allowedRoles && (allowedRoles.includes('admin') || allowedRoles.includes('super_admin')) && !allowedRoles.includes('client') && !allowedRoles.includes('lawyer');
 
   useEffect(() => {
     if (!isLoading) {
+      if (pathname === '/admin/login') {
+        if (isAuthenticated && (role === 'admin' || role === 'super_admin')) {
+          router.push('/admin');
+        }
+        return;
+      }
+
       if (!isAuthenticated) {
-        router.push('/login');
+        if (isAdminOnlyRoute || pathname.startsWith('/admin')) {
+          router.push('/admin/login');
+        } else {
+          router.push('/login');
+        }
       } else if (allowedRoles && !allowedRoles.includes(role)) {
-        if (role === 'lawyer') {
+        if (isAdminOnlyRoute || pathname.startsWith('/admin')) {
+          router.push('/admin/login');
+        } else if (role === 'lawyer') {
           router.push('/lawyer');
         } else if (role === 'admin' || role === 'super_admin') {
           router.push('/admin');
@@ -29,7 +45,11 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
         }
       }
     }
-  }, [isAuthenticated, isLoading, role, allowedRoles, router]);
+  }, [isAuthenticated, isLoading, role, allowedRoles, router, pathname, isAdminOnlyRoute]);
+
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
 
   if (isLoading) {
     return (

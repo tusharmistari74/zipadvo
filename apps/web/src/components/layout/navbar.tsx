@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Container, Button } from '@legalhub/ui';
 import { useAuth } from '../../lib/auth/context';
 import { Scale, Menu, X, ShieldCheck, User } from 'lucide-react';
+import { NotificationBell } from '../notifications/notification-bell';
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -74,11 +75,14 @@ export function Navbar() {
           {/* Desktop Right CTA */}
           <div className="hidden md:flex items-center space-x-3">
             {isAuthenticated ? (
-              <Link href={getDashboardLink()}>
-                <Button variant="outline" size="sm" leftIcon={<User className="h-4 w-4" />}>
-                  {profile?.fullName ? profile.fullName.split(' ')[0] : 'My Portal'}
-                </Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <NotificationBell />
+                <Link href={getDashboardLink()}>
+                  <Button variant="outline" size="sm" leftIcon={<User className="h-4 w-4" />}>
+                    {profile?.fullName ? profile.fullName.split(' ')[0] : 'My Portal'}
+                  </Button>
+                </Link>
+              </div>
             ) : (
               <>
                 <Link href="/login">

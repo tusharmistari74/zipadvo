@@ -6,7 +6,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/client';
 import { COLLECTIONS } from '../firebase/collections';
 import type { UserProfile, UserRole } from '@legalhub/types';
-import { signOutUser } from './auth-service';
+import { signOutUser, getLocalAuthSession, saveLocalAuthSession } from './auth-service';
 
 export interface AuthContextType {
   user: FirebaseUser | null;
@@ -25,7 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<FirebaseUser | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(() => getLocalAuthSession());
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchProfile = async (firebaseUser: FirebaseUser) => {
@@ -33,37 +33,77 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const userRef = doc(db, COLLECTIONS.USERS, firebaseUser.uid);
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
-        setProfile(userSnap.data() as UserProfile);
+        const data = userSnap.data() as UserProfile;
+        setProfile(data);
+        saveLocalAuthSession(data);
+      } else {
+        const local = getLocalAuthSession();
+        if (local) {
+          setProfile(local);
+        } else {
+          setProfile(null);
+        }
+      }
+    } catch {
+      const local = getLocalAuthSession();
+      if (local) {
+        setProfile(local);
       } else {
         setProfile(null);
       }
-    } catch {
-      setProfile(null);
     }
   };
 
   useEffect(() => {
+    // Sync with local session immediately
+    const initialLocal = getLocalAuthSession();
+    if (initialLocal) {
+      setProfile(initialLocal);
+      setIsLoading(false);
+    }
+
+    // Listen for custom auth session updates across the window/tabs
+    const handleSessionUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent<UserProfile | null>;
+      setProfile(customEvent.detail ?? getLocalAuthSession());
+      setIsLoading(false);
+    };
+
+    window.addEventListener('auth-session-update', handleSessionUpdate);
+    window.addEventListener('storage', handleSessionUpdate);
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         await fetchProfile(currentUser);
       } else {
-        setProfile(null);
+        const local = getLocalAuthSession();
+        if (local) {
+          setProfile(local);
+        } else {
+          setProfile(null);
+        }
       }
       setIsLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      window.removeEventListener('auth-session-update', handleSessionUpdate);
+      window.removeEventListener('storage', handleSessionUpdate);
+      unsubscribe();
+    };
   }, []);
 
   const refreshProfile = async () => {
     if (user) {
       await fetchProfile(user);
+    } else {
+      setProfile(getLocalAuthSession());
     }
   };
 
   const role: UserRole = profile?.role || 'client';
-  const isAuthenticated = Boolean(user);
+  const isAuthenticated = Boolean(user || profile);
   const isClient = role === 'client';
   const isLawyer = role === 'lawyer';
   const isAdmin = role === 'admin' || role === 'super_admin';

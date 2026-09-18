@@ -3,6 +3,8 @@ import { UserRole } from './auth';
 
 export type AuditAction =
   | 'user_login'
+  | 'user_blocked'
+  | 'user_unblocked'
   | 'lawyer_kyc_draft_saved'
   | 'lawyer_kyc_submitted'
   | 'lawyer_kyc_under_review'
@@ -14,12 +16,15 @@ export type AuditAction =
   | 'booking_created'
   | 'booking_unlocked'
   | 'booking_status_updated'
+  | 'booking_manual_override'
   | 'payment_captured'
   | 'payment_refunded'
   | 'document_uploaded'
   | 'document_accessed'
   | 'dispute_opened'
   | 'dispute_resolved'
+  | 'dispute_refunded'
+  | 'dispute_dismissed'
   | 'platform_settings_updated';
 
 export interface AuditLog extends BaseEntity {

@@ -122,8 +122,71 @@ export interface LawyerProfile extends BaseEntity {
   rating: number; // 0.0 to 5.0
   reviewCount: number;
   totalConsultationsCompleted: number;
+  chamberAddress?: string;
   availabilitySchedule?: LawyerAvailabilitySlot[];
   availabilityConfig?: LawyerAvailabilityConfig;
+}
+
+export interface PublicLawyerReview {
+  id: string;
+  clientName?: string;
+  clientDisplayName?: string;
+  rating: number;
+  reviewTitle?: string;
+  reviewText?: string;
+  reviewComment?: string;
+  serviceCategory?: string;
+  isVerifiedClient?: boolean;
+  createdAt: string;
+}
+
+export interface PublicLawyerService {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  indicativeFeeInr: number;
+  durationEstimate: string;
+}
+
+export interface PublicLawyerRatingBreakdown {
+  5: number;
+  4: number;
+  3: number;
+  2: number;
+  1: number;
+  total: number;
+  average: number;
+}
+
+export interface PublicLawyerProfile {
+  id: string;
+  fullName: string;
+  title: string;
+  bio: string;
+  avatarUrl?: string;
+  practiceAreas: PracticeArea[];
+  primaryCourt: MumbaiCourt;
+  yearsOfExperience: number;
+  spokenLanguages: string[];
+  locality: string;
+  city: string;
+  sanadNumber: string;
+  enrollmentYear: number;
+  stateBarCouncil?: string;
+  barCouncilName?: string;
+  consultationFeeInr: number;
+  rating: number;
+  reviewCount: number;
+  totalConsultationsCompleted: number;
+  isAcceptingBookings: boolean;
+  featured: boolean;
+  chamberAddress?: string;
+  reviews?: PublicLawyerReview[];
+  services?: PublicLawyerService[];
+  ratingBreakdown?: PublicLawyerRatingBreakdown;
+  nextAvailableSlot?: string;
+  isSanadVerified?: boolean;
 }
 
 export interface LawyerOnboardingDraft {
@@ -167,4 +230,3 @@ export interface LawyerOnboardingDraft {
     officeProofStoragePath?: string;
   };
 }
-

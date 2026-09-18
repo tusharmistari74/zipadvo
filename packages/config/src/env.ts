@@ -14,12 +14,15 @@ export const clientEnvSchema = z.object({
   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: z.string().min(1, 'Firebase Storage Bucket is required'),
   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: z.string().min(1, 'Firebase Messaging Sender ID is required'),
   NEXT_PUBLIC_FIREBASE_APP_ID: z.string().min(1, 'Firebase App ID is required'),
+  NEXT_PUBLIC_FIREBASE_DATABASE_URL: z.string().optional(),
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string().optional(),
+  NEXT_PUBLIC_FIREBASE_VAPID_KEY: z.string().optional(),
   NEXT_PUBLIC_USE_FIREBASE_EMULATORS: z.string().transform((v) => v === 'true').default('false'),
   NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST: z.string().optional(),
   NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST: z.string().optional(),
   NEXT_PUBLIC_FIREBASE_STORAGE_EMULATOR_HOST: z.string().optional(),
   NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1, 'Razorpay Key ID is required'),
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().optional(),
   NEXT_PUBLIC_CONSULTATION_UNLOCK_FEE_INR: z.coerce.number().positive().default(299),
 });
 
@@ -30,6 +33,7 @@ export const serverEnvSchema = z.object({
   FIREBASE_ADMIN_PROJECT_ID: z.string().min(1, 'Firebase Admin Project ID is required'),
   FIREBASE_ADMIN_CLIENT_EMAIL: z.string().email('Firebase Admin Client Email must be valid'),
   FIREBASE_ADMIN_PRIVATE_KEY: z.string().min(1, 'Firebase Admin Private Key is required'),
+  FIREBASE_DATABASE_URL: z.string().optional(),
   RAZORPAY_KEY_SECRET: z.string().min(1, 'Razorpay Key Secret is required'),
   RAZORPAY_WEBHOOK_SECRET: z.string().min(1, 'Razorpay Webhook Secret is required'),
   STORAGE_PRIVATE_BUCKET: z.string().min(1, 'Private storage bucket is required'),

@@ -22,12 +22,15 @@ function getFirebaseAdminApp(): admin.app.App {
         clientEmail,
         privateKey,
       }),
+      databaseURL: process.env.FIREBASE_DATABASE_URL || process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL || 'https://zipadvo2026new-default-rtdb.firebaseio.com',
       storageBucket: process.env.STORAGE_PRIVATE_BUCKET,
     });
   }
 
   // Fallback to default application credentials if running in GCP environment
-  return admin.initializeApp();
+  return admin.initializeApp({
+    databaseURL: process.env.FIREBASE_DATABASE_URL || process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL || 'https://zipadvo2026new-default-rtdb.firebaseio.com',
+  });
 }
 
 export function getAdminAuth(): admin.auth.Auth {
@@ -40,4 +43,8 @@ export function getAdminFirestore(): admin.firestore.Firestore {
 
 export function getAdminStorage(): admin.storage.Storage {
   return getFirebaseAdminApp().storage();
+}
+
+export function getAdminDatabase(): admin.database.Database {
+  return getFirebaseAdminApp().database();
 }

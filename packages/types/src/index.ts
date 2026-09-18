@@ -10,3 +10,6 @@ export * from './review';
 export * from './notification';
 export * from './settings';
 export * from './audit';
+export * from './lawyer-portal';
+export * from './admin-portal';
+export * from './analytics';

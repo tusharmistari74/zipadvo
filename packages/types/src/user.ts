@@ -7,6 +7,7 @@ export interface UserProfile extends BaseEntity {
   uid: string;
   email?: string;
   phoneNumber: string; // Indian E.164 phone (+91XXXXXXXXXX)
+  phone?: string; // Alias for phoneNumber
   fullName: string;
   role: UserRole;
   status: UserStatus;

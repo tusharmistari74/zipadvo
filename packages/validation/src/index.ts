@@ -6,3 +6,8 @@ export * from './document.schema';
 export * from './dispute.schema';
 export * from './auth.schema';
 export * from './availability.schema';
+export * from './notification.schema';
+export * from './lawyer-portal.schema';
+export * from './admin-portal.schema';
+export * from './review.schema';
+export * from './settings.schema';

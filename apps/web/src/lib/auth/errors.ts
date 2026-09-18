@@ -27,11 +27,24 @@ export function mapFirebaseAuthError(errorCode: string): string {
       return 'Security verification (reCAPTCHA) failed. Please try again.';
     case 'auth/popup-closed-by-user':
       return 'Sign-in cancelled. The sign-in window was closed before completion.';
+    case 'auth/popup-blocked':
+      return 'Sign-in popup was blocked by your browser. Please allow popups for localhost:3000 and try again.';
+    case 'auth/cancelled-popup-request':
+      return 'Another sign-in attempt is already in progress.';
+    case 'auth/operation-not-allowed':
+      return 'Sign-in method is disabled in Firebase Console. Please enable "Email/Password" and "Google" under Firebase Console > Authentication > Sign-in method.';
+    case 'auth/unauthorized-domain':
+      return 'Unauthorized Domain: Please add "localhost" to Authorized Domains under Firebase Console > Authentication > Settings > Authorized domains.';
+    case 'auth/configuration-not-found':
+      return 'Authentication configuration not found in Firebase Console. Please ensure Firebase Authentication is initialized in project zipadvo2026new.';
     case 'auth/network-request-failed':
       return 'Network connection error. Please verify your internet connection.';
     case 'auth/requires-recent-login':
       return 'For your security, please log in again to perform this sensitive action.';
     default:
+      if (errorCode) {
+        return `An authentication error occurred (${errorCode}). Please try again or check Firebase settings.`;
+      }
       return 'An authentication error occurred. Please try again or contact support.';
   }
 }
