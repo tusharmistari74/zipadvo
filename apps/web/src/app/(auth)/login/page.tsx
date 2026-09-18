@@ -168,7 +168,7 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-slate-50">
       <Container className="max-w-md">
-        <div id="recaptcha-container" />
+        <div id="recaptcha-container" suppressHydrationWarning />
         <Card className="shadow-lg border-slate-200">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-2">

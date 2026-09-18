@@ -26,10 +26,10 @@ export default function RootLayout({
       </head>
       <body className="antialiased" suppressHydrationWarning>
         <AuthProvider>{children}</AuthProvider>
-        {/* Google reCAPTCHA Enterprise Script */}
+        {/* Google reCAPTCHA Enterprise Script - lazyOnload prevents body hydration collisions */}
         <Script
           src={`https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_KEY}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </body>
     </html>
