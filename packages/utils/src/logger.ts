@@ -87,19 +87,6 @@ export function sanitizeLogData(data: unknown, depth = 0): unknown {
 }
 
 function outputLog(isError: boolean, jsonString: string): void {
-  try {
-    if (typeof process !== 'undefined' && (isError ? process.stderr : process.stdout)) {
-      if (isError) {
-        process.stderr.write(jsonString + '\n');
-      } else {
-        process.stdout.write(jsonString + '\n');
-      }
-      return;
-    }
-  } catch {
-    // Fall through to console
-  }
-
   if (isError) {
     // eslint-disable-next-line no-console
     console.error(jsonString);

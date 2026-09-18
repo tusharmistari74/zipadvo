@@ -15,6 +15,7 @@ import {
 } from '../../../lib/auth/auth-service';
 import { executeRecaptchaAction } from '../../../lib/auth/recaptcha-enterprise';
 import { mapFirebaseAuthError } from '../../../lib/auth/errors';
+import type { UserRole } from '@legalhub/types';
 
 export default function LoginPage() {
   const router = useRouter();

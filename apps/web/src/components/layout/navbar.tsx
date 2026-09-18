@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Container, Button } from '@legalhub/ui';
@@ -9,9 +9,14 @@ import { Scale, Menu, X, ShieldCheck, User } from 'lucide-react';
 import { NotificationBell } from '../notifications/notification-bell';
 
 export function Navbar() {
+  const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { isAuthenticated, profile, role } = useAuth();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navLinks = [
     { label: 'Find a Lawyer', href: '/find-lawyer' },
@@ -74,7 +79,7 @@ export function Navbar() {
 
           {/* Desktop Right CTA */}
           <div className="hidden md:flex items-center space-x-3">
-            {isAuthenticated ? (
+            {mounted && isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <NotificationBell />
                 <Link href={getDashboardLink()}>
@@ -130,7 +135,7 @@ export function Navbar() {
           </nav>
 
           <div className="pt-3 border-t border-slate-100 space-y-2">
-            {isAuthenticated ? (
+            {mounted && isAuthenticated ? (
               <Link href={getDashboardLink()} onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="primary" fullWidth leftIcon={<User className="h-4 w-4" />}>
                   Go to Dashboard ({profile?.role?.toUpperCase() || 'USER'})

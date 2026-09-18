@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Container, Badge } from '@legalhub/ui';
-import { ShieldCheck, Lock, ArrowRight, UserCheck } from 'lucide-react';
+import { ShieldCheck, Lock } from 'lucide-react';
 import { signInWithEmail, signInAsDevUser, PRIMARY_ADMIN_CREDENTIAL } from '../../../../lib/auth/auth-service';
 import { executeRecaptchaAction } from '../../../../lib/auth/recaptcha-enterprise';
 import { mapFirebaseAuthError } from '../../../../lib/auth/errors';
@@ -52,18 +52,6 @@ export default function AdminLoginPage() {
       }
       const fbError = err as { code?: string; message?: string };
       setErrorMessage(mapFirebaseAuthError(fbError.code || fbError.message || ''));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleFastSuperAdminLogin = async () => {
-    setIsLoading(true);
-    try {
-      await signInAsDevUser('admin');
-      router.push('/admin');
-    } catch {
-      setErrorMessage('Failed to initiate instant administrator session');
     } finally {
       setIsLoading(false);
     }
