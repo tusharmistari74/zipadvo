@@ -12,16 +12,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { user, profile, role, isLoading } = useAuth();
   const [mounted, setMounted] = useState(false);
 
+  const isLoginPage = pathname ? pathname.startsWith('/admin/login') : false;
+
+  const isAdmin =
+    role === 'admin' ||
+    role === 'super_admin' ||
+    profile?.role === 'admin' ||
+    profile?.role === 'super_admin';
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Allow unrestricted rendering of the dedicated admin login page
-  if (pathname === '/admin/login') {
+  useEffect(() => {
+    if (mounted && !isLoading && !isLoginPage && (!user || !isAdmin)) {
+      router.replace('/admin/login');
+    }
+  }, [mounted, isLoading, isLoginPage, user, isAdmin, router]);
+
+  // Unrestricted rendering for admin login page
+  if (isLoginPage) {
     return <>{children}</>;
   }
 
-  // During SSR or initial auth loading, show a clean secure loading state
+  // During SSR or initial auth loading, show a stable secure loading state
   if (!mounted || isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-900 text-slate-100">
@@ -35,17 +49,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  const isAdmin =
-    role === 'admin' ||
-    role === 'super_admin' ||
-    profile?.role === 'admin' ||
-    profile?.role === 'super_admin';
-
-  // If not authenticated as an admin, strictly redirect to /admin/login
+  // If not authenticated as an admin on protected admin routes
   if (!user || !isAdmin) {
-    if (typeof window !== 'undefined') {
-      router.replace('/admin/login');
-    }
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-900 p-6 text-slate-100">
         <Container className="max-w-md">
