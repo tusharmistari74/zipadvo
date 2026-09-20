@@ -128,7 +128,7 @@ export function BookingUnlockCard({ profile }: BookingUnlockCardProps) {
       <div className="p-3.5 rounded-xl border border-slate-200 bg-white text-[11px] text-slate-500 space-y-1">
         <p className="font-semibold text-slate-700">BCI Compliance Notice</p>
         <p className="leading-relaxed">
-          LegalHubMumbai is a technology intermediary and not a law firm. Lawyer profiles are listed for factual reference in compliance with Bar Council of India Rule 36.
+          ZipAdvo is a technology intermediary and not a law firm. Lawyer profiles are listed for factual reference in compliance with Bar Council of India Rule 36.
         </p>
       </div>
 

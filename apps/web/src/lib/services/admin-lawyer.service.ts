@@ -574,4 +574,4 @@ export async function restoreLawyer(
       error: err instanceof Error ? err.message : 'Failed to restore lawyer',
     };
   }
-}
+} 

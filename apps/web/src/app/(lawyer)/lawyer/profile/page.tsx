@@ -98,7 +98,7 @@ export default function LawyerProfileEditPage() {
                 Advocate Chamber Profile & Fees
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Update your public profile, practice areas, consultation fee, and chamber address on LegalHubMumbai.
+                Update your public profile, practice areas, consultation fee, and chamber address on ZipAdvo.
               </p>
             </div>
 

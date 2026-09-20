@@ -79,7 +79,9 @@ jobs:
 
       - name: Deploy to Firebase Staging
         uses: FirebaseExtended/action-hosting-deploy@v0
-        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_STAGING != '' }}
+        if: env.FIREBASE_SERVICE_ACCOUNT != ''
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_STAGING }}
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_STAGING }}
@@ -88,6 +90,8 @@ jobs:
         continue-on-error: true
 
       - name: Post-Deployment Automated Health Check Probe
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_STAGING }}
         run: |
           echo "Executing automated health check against Staging environment..."
           TARGET_URL="https://staging.legalhubmumbai.com/api/health"
@@ -101,7 +105,7 @@ jobs:
           for i in $(seq 1 $MAX_RETRIES); do
             echo "Attempt $i/$MAX_RETRIES: Probing $TARGET_URL..."
             # Check if endpoint is reachable (when live staging is configured)
-            if [ -n "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_STAGING }}" ]; then
+            if [ -n "$FIREBASE_SERVICE_ACCOUNT" ]; then
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" -m 10 "$TARGET_URL" || echo "000")
               if [ "$STATUS" = "200" ]; then
                 echo "✅ Health check passed with HTTP 200 OK!"

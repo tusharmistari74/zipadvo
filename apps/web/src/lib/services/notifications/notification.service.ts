@@ -103,7 +103,7 @@ export async function emitNotificationEvent(
     try {
       const emailReport = await deliverEmailNotification({
         to: payload.recipientEmail,
-        subject: `[LegalHubMumbai] ${payload.title}`,
+        subject: `[ZipAdvo] ${payload.title}`,
         body: payload.body,
         actionUrl: payload.actionUrl,
         metadata: payload.metadata,
@@ -127,7 +127,7 @@ export async function emitNotificationEvent(
     try {
       const smsReport = await deliverSmsNotification({
         to: payload.recipientPhone,
-        text: `LegalHubMumbai: ${payload.title}. ${payload.body}`,
+        text: `ZipAdvo: ${payload.title}. ${payload.body}`,
         metadata: payload.metadata,
       });
       deliveryReports.push(smsReport);

@@ -65,7 +65,7 @@ function DesignSystemShowcaseContent() {
         <div className="space-y-2 border-b border-slate-200 pb-6">
           <Breadcrumb
             items={[
-              { label: 'LegalHubMumbai', href: '/' },
+              { label: 'ZipAdvo', href: '/' },
               { label: 'Internal Design System', isCurrent: true },
             ]}
           />

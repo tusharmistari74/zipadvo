@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
             </div>
             <CardTitle className="text-2xl font-bold text-slate-900">Reset Password</CardTitle>
             <CardDescription>
-              Enter the email address associated with your LegalHubMumbai account
+              Enter the email address associated with your ZipAdvo account
             </CardDescription>
           </CardHeader>
 

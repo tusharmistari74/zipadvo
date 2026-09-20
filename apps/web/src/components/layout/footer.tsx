@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Container } from '@legalhub/ui';
-import { Scale, ShieldCheck, Mail, MapPin } from 'lucide-react';
+import { Scale, ShieldCheck, Mail, MapPin, Phone } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -15,20 +15,28 @@ export function Footer() {
                 <Scale className="h-5 w-5" />
               </div>
               <span className="font-serif text-xl font-bold tracking-tight text-white">
-                LegalHub<span className="text-blue-400">Mumbai</span>
+                Zip<span className="text-blue-400">Advo</span>
               </span>
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-              Mumbai&apos;s verified legal marketplace connecting property buyers, conveyance clients, and redevelopment societies with Bar Council verified advocates.
+              Mumbai&apos;s verified legal advocate marketplace connecting property buyers, conveyance clients, and redevelopment societies with Bar Council accredited advocates.
             </p>
-            <div className="space-y-2 text-xs text-slate-400">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-slate-500 shrink-0" />
-                <span>Fort & BKC Chambers, Mumbai, Maharashtra 400001</span>
+            <div className="space-y-2.5 text-xs text-slate-300">
+              <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
+                <span>Nandanvan appartment, bus stop, 13, Kalyan-Murbad Rd, near prem auto, Purnima, Kalyan, Maharashtra 421301</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-slate-500 shrink-0" />
-                <span>support@legalhubmumbai.com</span>
+                <Mail className="h-4 w-4 text-blue-400 shrink-0" />
+                <a href="mailto:zipadvo@gmail.com" className="hover:text-white transition-colors underline decoration-blue-500/50">
+                  zipadvo@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-emerald-400 shrink-0" />
+                <a href="tel:+917768942390" className="hover:text-white transition-colors font-semibold text-emerald-300">
+                  +91 77689 42390 (Helpline & WhatsApp)
+                </a>
               </div>
             </div>
           </div>
@@ -117,13 +125,13 @@ export function Footer() {
             <ShieldCheck className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
             <div>
               <span className="font-semibold text-slate-300">Bar Council of India Disclaimer: </span>
-              LegalHubMumbai is a technology intermediary platform and is not a law firm. As per the rules of the Bar Council of India, advocates are not permitted to solicit work or advertise. The platform facilitates discovery and appointment booking at the client&apos;s sole initiative. The ₹299 unlock fee is a technology facilitation fee for platform operations.
+              ZipAdvo is a technology intermediary platform and is not a law firm. As per the rules of the Bar Council of India, advocates are not permitted to solicit work or advertise. The platform facilitates discovery and appointment booking at the client&apos;s sole initiative. The ₹299 unlock fee is a technology facilitation fee for platform operations.
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-            <p>© {new Date().getFullYear()} LegalHubMumbai Technologies Pvt. Ltd. All rights reserved.</p>
-            <p>Built with enterprise security & data privacy in Mumbai, India.</p>
+            <p>© {new Date().getFullYear()} ZipAdvo Technologies Pvt. Ltd. All rights reserved.</p>
+            <p>24/7 Support: zipadvo@gmail.com • Helpline: +91 77689 42390</p>
           </div>
         </div>
       </Container>

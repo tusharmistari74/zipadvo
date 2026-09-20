@@ -14,11 +14,11 @@ import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'About Us | LegalHubMumbai - Mumbai’s Verified Legal Network',
+  title: 'About Us | ZipAdvo - Mumbai’s Verified Legal Network',
   description:
-    'Learn about LegalHubMumbai’s mission to bring transparency, Sanad-verified integrity, and digital security to Mumbai real estate and document conveyance.',
+    'Learn about ZipAdvo’s mission to bring transparency, Sanad-verified integrity, and digital security to Mumbai real estate and document conveyance.',
   openGraph: {
-    title: 'About LegalHubMumbai - Real Estate & Conveyancing Legal Infrastructure',
+    title: 'About ZipAdvo - Real Estate & Conveyancing Legal Infrastructure',
     description:
       'Connecting property buyers and document clients with Bar Council-verified advocates across Mumbai City, Suburban, and MMR.',
   },
@@ -77,7 +77,7 @@ export default function AboutPage() {
               Transforming Property Legal Due Diligence in Mumbai
             </h1>
             <p className="text-lg text-slate-600 leading-relaxed">
-              LegalHubMumbai was founded to replace unvetted touts, opaque broker markups, and vulnerable paperwork
+              ZipAdvo was founded to replace unvetted touts, opaque broker markups, and vulnerable paperwork
               with a transparent, Bar Council-compliant technology platform.
             </p>
           </div>
@@ -107,7 +107,7 @@ export default function AboutPage() {
                   and exorbitant hidden charges.
                 </p>
                 <p className="font-medium text-slate-900">
-                  LegalHubMumbai provides a clean, independent digital bridge connecting clients directly with verified advocates
+                  ZipAdvo provides a clean, independent digital bridge connecting clients directly with verified advocates
                   who protect buyer rights without broker bias.
                 </p>
               </div>
@@ -119,15 +119,24 @@ export default function AboutPage() {
                 <div className="space-y-4 text-sm text-slate-300">
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-                    <span><strong>100% Sanad Verification:</strong> No uncredentialed agents or intermediaries are permitted on the platform.</span>
+                    <div>
+                      <span className="font-semibold text-white">Direct Access to Verified Counsel:</span>
+                      <p className="text-xs text-slate-400 mt-0.5">Sanad numbers verified against official Bar Council registers.</p>
+                    </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-                    <span><strong>No Hidden Markups:</strong> Direct access unlock for ₹299; legal consultation fees are agreed directly with your advocate.</span>
+                    <div>
+                      <span className="font-semibold text-white">Zero Broker Markups:</span>
+                      <p className="text-xs text-slate-400 mt-0.5">Fixed ₹299 facilitation fee with zero cuts taken from advocate legal fees.</p>
+                    </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-                    <span><strong>Full Data Confidentiality:</strong> Automated Aadhaar masking, banking-grade encryption, and zero third-party data selling.</span>
+                    <div>
+                      <span className="font-semibold text-white">Data Privacy by Design:</span>
+                      <p className="text-xs text-slate-400 mt-0.5">Private document vaults, masked Aadhaar proofs, and no data trading.</p>
+                    </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
@@ -219,8 +228,8 @@ export default function AboutPage() {
               Statutory Disclosure & BCI Compliance
             </p>
             <p className="text-xs text-slate-600 leading-relaxed">
-              LegalHubMumbai is a technology intermediary and information directory governed by the Information Technology Act, 2000.
-              LegalHubMumbai is not a law firm and does not provide legal advice or solicit legal representation on behalf of any advocate.
+              ZipAdvo is a technology intermediary and information directory governed by the Information Technology Act, 2000.
+              ZipAdvo is not a law firm and does not provide legal advice or solicit legal representation on behalf of any advocate.
               All legal consultations, title reports, drafting, and appearances are rendered directly by independent advocates enrolled with the Bar Council of Maharashtra & Goa.
             </p>
           </div>

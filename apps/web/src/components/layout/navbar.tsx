@@ -44,7 +44,7 @@ export function Navbar() {
             <div>
               <div className="flex items-center gap-1.5">
                 <span className="font-serif text-lg font-bold tracking-tight text-slate-900">
-                  LegalHub<span className="text-blue-700">Mumbai</span>
+                  Zip<span className="text-blue-700">Advo</span>
                 </span>
                 <span className="inline-flex items-center rounded-sm bg-blue-50 px-1 py-0.5 text-[10px] font-semibold text-blue-700">
                   <ShieldCheck className="h-3 w-3 mr-0.5" />
@@ -52,7 +52,7 @@ export function Navbar() {
                 </span>
               </div>
               <p className="text-[10px] text-slate-500 font-medium tracking-wide">
-                Property & Document Registry Network
+                Verified Advocates & Property Registry Network
               </p>
             </div>
           </Link>

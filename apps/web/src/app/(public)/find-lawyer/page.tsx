@@ -398,12 +398,12 @@ export default function FindLawyerPage() {
                       <div className="flex flex-col items-end justify-between self-stretch sm:border-l sm:border-slate-100 sm:pl-6 space-y-3 shrink-0">
                         <div className="text-right">
                           <Rating value={lawyer.rating} reviewCount={lawyer.reviewCount} showText size="sm" />
-                          <p className="text-xs text-slate-500 mt-1 font-medium">Consultation Unlock: ₹299</p>
+                          <p className="text-xs text-slate-500 mt-1 font-medium">Unlock Fee: ₹299</p>
                         </div>
 
-                        <Link href="/register">
-                          <Button variant="primary" size="sm">
-                            Unlock & Book
+                        <Link href={`/lawyers/${lawyer.id}`}>
+                          <Button variant="primary" size="sm" className="bg-blue-600 hover:bg-blue-700 shadow-sm">
+                            View Profile & Book
                           </Button>
                         </Link>
                       </div>

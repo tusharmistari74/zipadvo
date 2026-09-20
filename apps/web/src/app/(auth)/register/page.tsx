@@ -114,11 +114,11 @@ export default function RegisterPage() {
         <Card className="shadow-lg border-slate-200">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-2">
-              <Badge variant="default">LegalHubMumbai Registration</Badge>
+              <Badge variant="default">ZipAdvo Registration</Badge>
             </div>
             <CardTitle className="text-2xl font-bold text-slate-900">Create Your Account</CardTitle>
             <CardDescription>
-              Join Mumbai&apos;s verified legal services and conveyancing network
+              Join Maharashtra&apos;s verified legal services and conveyancing network
             </CardDescription>
           </CardHeader>
 
@@ -254,7 +254,7 @@ export default function RegisterPage() {
                   className="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
                 <label htmlFor="terms" className="text-xs text-slate-600">
-                  I agree to the LegalHubMumbai{' '}
+                  I agree to the ZipAdvo{' '}
                   <span className="text-blue-700 underline cursor-pointer">Terms of Service</span>,{' '}
                   <span className="text-blue-700 underline cursor-pointer">Privacy Policy</span>, and Bar Council of Maharashtra code of ethics.
                 </label>

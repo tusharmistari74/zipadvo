@@ -172,7 +172,7 @@ export default function LoginPage() {
         <Card className="shadow-lg border-slate-200">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-2">
-              <Badge variant="default">LegalHubMumbai Secure Access</Badge>
+              <Badge variant="default">ZipAdvo Secure Access</Badge>
             </div>
             <CardTitle className="text-2xl font-bold text-slate-900">Sign In</CardTitle>
             <CardDescription>

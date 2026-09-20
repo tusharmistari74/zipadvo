@@ -60,7 +60,7 @@ interface BookingDetailPageProps {
 }
 
 export default function BookingDetailPage({ params }: BookingDetailPageProps) {
-  const { user, role, isLoading: authLoading } = useAuth();
+  const { user, profile, role, isLoading: authLoading } = useAuth();
 
   const [booking, setBooking] = useState<Booking | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,7 +84,7 @@ export default function BookingDetailPage({ params }: BookingDetailPageProps) {
   // Load Documents
   const loadDocuments = async () => {
     if (!params.bookingId) return;
-    const callerUid = user?.uid || 'guest_client_uid';
+    const callerUid = user?.uid || profile?.uid || profile?.id || booking?.clientUid || 'guest_client_uid';
     const callerRole = (role?.toLowerCase() as 'client' | 'lawyer' | 'admin' | 'super_admin') || 'client';
 
     const res = await getBookingDocuments(params.bookingId, callerUid, callerRole);
@@ -97,7 +97,7 @@ export default function BookingDetailPage({ params }: BookingDetailPageProps) {
   const loadBooking = async () => {
     if (!params.bookingId) return;
 
-    const callerUid = user?.uid || 'guest_client_uid';
+    const callerUid = user?.uid || profile?.uid || profile?.id || 'guest_client_uid';
     const callerRole = (role?.toLowerCase() as 'client' | 'lawyer' | 'admin' | 'super_admin') || 'client';
 
     const res = await getBookingById(params.bookingId, callerUid, callerRole);
@@ -116,7 +116,7 @@ export default function BookingDetailPage({ params }: BookingDetailPageProps) {
     if (!authLoading) {
       loadBooking();
     }
-  }, [params.bookingId, authLoading, user?.uid, role]);
+  }, [params.bookingId, authLoading, user?.uid, profile?.uid, role]);
 
   // Handler: Upload Document
   const handleUploadDocument = async (e: React.FormEvent) => {
@@ -880,7 +880,7 @@ export default function BookingDetailPage({ params }: BookingDetailPageProps) {
                       <CheckCircle2 className="h-6 w-6 text-emerald-600 mx-auto mb-1" />
                       <p className="font-bold">Consultation Concluded</p>
                       <p className="text-[11px] text-emerald-800">
-                        Thank you for using LegalHubMumbai.
+                        Thank you for using ZipAdvo.
                       </p>
                     </div>
                   )}

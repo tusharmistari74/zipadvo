@@ -88,7 +88,7 @@ export function LawyerServicesFees({ profile }: LawyerServicesFeesProps) {
           <p className="leading-relaxed">
             *Indicative fee estimates are governed by matter complexity, number of property survey numbers, and title history.
             Advocates confirm exact professional fees directly with clients following initial document review.
-            LegalHubMumbai takes zero commission from advocate fees.
+            ZipAdvo takes zero commission from advocate fees.
           </p>
         </div>
       </CardContent>

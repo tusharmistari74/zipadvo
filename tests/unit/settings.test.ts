@@ -56,8 +56,8 @@ describe('Phase 20: Platform Configuration & Settings Management', () => {
       expect(settings.commissionRate).toBe(10);
       expect(settings.unlockFee).toBe(299);
       expect(settings.minimumWithdrawal).toBe(500);
-      expect(settings.supportEmail).toBe('support@legalhubmumbai.com');
-      expect(settings.supportPhone).toBe('+91 22 2265 4321');
+      expect(settings.supportEmail).toBe('zipadvo@gmail.com');
+      expect(settings.supportPhone).toBe('+91 77689 42390');
       expect(settings.platformVersion).toBe('1.0.0');
       expect(settings.maintenanceMode).toBe(false);
     });
@@ -67,8 +67,8 @@ describe('Phase 20: Platform Configuration & Settings Management', () => {
       expect(await getUnlockFee()).toBe(299);
       expect(await getConsultationUnlockFee()).toBe(299);
       expect(await getMinimumWithdrawal()).toBe(500);
-      expect(await getSupportEmail()).toBe('support@legalhubmumbai.com');
-      expect(await getSupportPhone()).toBe('+91 22 2265 4321');
+      expect(await getSupportEmail()).toBe('zipadvo@gmail.com');
+      expect(await getSupportPhone()).toBe('+91 77689 42390');
       expect(await getPlatformVersion()).toBe('1.0.0');
     });
   });
@@ -255,7 +255,7 @@ describe('Phase 20: Platform Configuration & Settings Management', () => {
       const emailDiff = updateResult.changes?.find((c) => c.settingKey === 'supportEmail');
       expect(emailDiff).toEqual({
         settingKey: 'supportEmail',
-        oldValue: 'support@legalhubmumbai.com',
+        oldValue: 'zipadvo@gmail.com',
         newValue: 'ops@legalhubmumbai.com',
       });
 

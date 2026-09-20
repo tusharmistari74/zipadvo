@@ -60,6 +60,19 @@ export function BookingModal({ lawyer, isOpen, onClose }: BookingModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Sync profile details once auth mounts
+  React.useEffect(() => {
+    if (profile) {
+      if (profile.fullName) setClientName(profile.fullName);
+      if (profile.phoneNumber) setClientPhone(profile.phoneNumber);
+      if (profile.email) setClientEmail(profile.email);
+    } else if (user) {
+      if (user.displayName) setClientName(user.displayName);
+      if (user.phoneNumber) setClientPhone(user.phoneNumber);
+      if (user.email) setClientEmail(user.email);
+    }
+  }, [profile, user]);
+
   const availabilityConfig = {
     ...DEFAULT_LAWYER_AVAILABILITY_CONFIG,
     weeklySchedule: DEFAULT_LAWYER_AVAILABILITY_CONFIG.weeklySchedule.map((day) => {

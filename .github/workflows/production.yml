@@ -88,7 +88,9 @@ jobs:
 
       - name: Deploy to Firebase Production (Hosting, Rules, Functions)
         uses: FirebaseExtended/action-hosting-deploy@v0
-        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_PROD != '' }}
+        if: env.FIREBASE_SERVICE_ACCOUNT != ''
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_PROD }}
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_PROD }}
@@ -97,6 +99,8 @@ jobs:
         continue-on-error: true
 
       - name: Post-Deployment Automated Health Probe
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_PROD }}
         run: |
           echo "Executing automated health check against Production environment..."
           TARGET_URL="https://legalhubmumbai.com/api/health"
@@ -108,7 +112,7 @@ jobs:
           
           for i in $(seq 1 $MAX_RETRIES); do
             echo "Attempt $i/$MAX_RETRIES: Probing $TARGET_URL..."
-            if [ -n "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEGALHUBMUMBAI_PROD }}" ]; then
+            if [ -n "$FIREBASE_SERVICE_ACCOUNT" ]; then
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" -m 10 "$TARGET_URL" || echo "000")
               if [ "$STATUS" = "200" ]; then
                 echo "✅ Production health check passed with HTTP 200 OK!"

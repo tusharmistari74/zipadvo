@@ -114,7 +114,7 @@ export async function initiateRazorpayPayment(options: InitiatePaymentOptions): 
       key: keyId,
       amount: order.amount,
       currency: order.currency,
-      name: 'LegalHubMumbai',
+      name: 'ZipAdvo',
       description: `Advocate Contact & Vault Unlock - ${order.bookingReference}`,
       order_id: order.id,
       notes: order.notes,
@@ -124,7 +124,7 @@ export async function initiateRazorpayPayment(options: InitiatePaymentOptions): 
         contact: clientPhone || '',
       },
       theme: {
-        color: '#0f172a', // LegalHubMumbai Slate Navy
+        color: '#1e3a8a', // ZipAdvo Navy Blue
       },
       modal: {
         ondismiss: () => {

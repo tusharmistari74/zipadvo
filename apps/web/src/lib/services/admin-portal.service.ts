@@ -30,8 +30,8 @@ let adminPlatformSettingsStore: PlatformSettings = {
   commissionRate: 15,
   unlockFee: 299,
   minimumWithdrawal: 500,
-  supportEmail: 'support@legalhubmumbai.com',
-  supportPhone: '+91 22 2266 1234',
+  supportEmail: 'zipadvo@gmail.com',
+  supportPhone: '+91 77689 42390',
   platformVersion: '1.0.0',
   fees: {
     consultationUnlockFeeInr: 299,

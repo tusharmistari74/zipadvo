@@ -3,9 +3,7 @@ import Link from 'next/link';
 import { Container, Button, Card, CardContent, CardHeader, CardTitle, Badge } from '@legalhub/ui';
 import {
   Search,
-  CreditCard,
   FileCheck,
-  Building,
   ShieldCheck,
   Lock,
   ArrowRight,
@@ -13,16 +11,17 @@ import {
   XCircle,
   HelpCircle,
   Users,
+  Key,
 } from 'lucide-react';
 import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'How It Works | LegalHubMumbai - Transparent Legal Facilitation',
+  title: 'How It Works | ZipAdvo - Transparent Legal Facilitation',
   description:
-    'Understand how LegalHubMumbai connects you with verified Mumbai advocates for property title checks, deed drafting, and sub-registrar conveyance in 4 simple steps.',
+    'Understand how ZipAdvo connects you with verified Mumbai advocates for property title checks, deed drafting, and sub-registrar conveyance in 4 simple steps.',
   openGraph: {
-    title: 'How LegalHubMumbai Works - Property & Documentation Legal Services',
+    title: 'How ZipAdvo Works - Property & Documentation Legal Services',
     description:
       'Step-by-step guide to finding verified advocates in Mumbai. Direct contact unlock for ₹299, secure document handling, and Sub-Registrar support.',
   },
@@ -38,44 +37,44 @@ export default function HowItWorksPage() {
         'Filter by Mumbai micro-market (South Mumbai, Bandra, Andheri, Thane, Navi Mumbai) and exact service requirement (Title Search, RERA Due Diligence, Leave & License, Sale Deed).',
       features: [
         'Bar Council Sanad & verification status displayed',
-        'Transparent chamber locations and verified practice years',
-        'Client ratings and verified review history',
+        'Transparent fee estimates & verified experience',
+        'Chamber location and Mumbai court jurisdiction clarity',
       ],
     },
     {
       number: '02',
-      icon: CreditCard,
-      title: 'Unlock Direct Facilitation (₹299)',
+      icon: Key,
+      title: 'Direct Advocate Unlock (₹299 Facilitation)',
       description:
-        'Pay a modest, one-time platform facilitation fee of ₹299 to unlock direct chamber contact, appointment scheduling, and encrypted document vault access.',
+        'Pay a nominal ₹299 platform facilitation fee to unlock the advocate’s direct mobile number, chamber address, email, and instant scheduling calendar.',
       features: [
-        'Instant WhatsApp & direct phone connectivity',
-        'Direct consultation booking without intermediary commission markups',
-        '100% money-back guarantee if advocate is unresponsive within 24h',
+        'Instant phone number & direct WhatsApp access',
+        'Direct calendar booking without broker markups',
+        'Zero commission taken on advocate legal fees',
       ],
     },
     {
       number: '03',
-      icon: FileCheck,
-      title: 'Upload to Encrypted Document Vault',
+      icon: Lock,
+      title: 'Encrypted Document Sharing (Optional)',
       description:
-        'Securely share property 7/12 extracts, chain of title deeds, index II copies, and draft agreements. Documents are protected with banking-grade AES-256 encryption.',
+        'Upload sensitive title deeds, 7/12 extracts, Index II, and search reports directly to your AES-256 encrypted confidential vault.',
       features: [
-        'Automatic Aadhaar/sensitive ID number masking',
-        'Granular document access control for your assigned advocate',
-        'Digital audit logs for every document view and download',
+        'Client-side Aadhaar/PAN masking compliance',
+        'Time-limited access tokens for authorized advocates only',
+        'Permanent client data sovereignty (DPDP Act compliant)',
       ],
     },
     {
       number: '04',
-      icon: Building,
+      icon: FileCheck,
       title: 'Consultation & Conveyance Execution',
       description:
-        'Conclude your legal due diligence, agreement drafting, and sub-registrar biometric execution with your advocate guiding you throughout.',
+        'Meet the advocate in their Mumbai chamber or connect via video. Receive a stamped Title Verification Report or complete deed registration at the Sub-Registrar Office.',
       features: [
-        'Chamber meeting or video consultation options',
-        'Title Search Report (TSR) and public notice drafting assistance',
-        'Sub-Registrar Office (SRO) guidance across Mumbai & MMR',
+        '48-hour SLA for preliminary title verification opinions',
+        'In-person representation at SRO / MahaRERA / High Court',
+        'Direct client-advocate billing with no platform cuts',
       ],
     },
   ];
@@ -114,8 +113,8 @@ export default function HowItWorksPage() {
       a: 'The ₹299 fee is an intermediary platform facilitation fee that covers identity verification, platform maintenance, encrypted document vault hosting, and direct contact unlocking. It is NOT legal advisory fees; legal consultation fees are agreed upon directly between you and your chosen advocate.',
     },
     {
-      q: 'Are the lawyers on LegalHubMumbai employees of the platform?',
-      a: 'No. LegalHubMumbai is a technology intermediary platform. All listed advocates are independent legal practitioners enrolled with the Bar Council of Maharashtra & Goa. In accordance with Bar Council of India rules, the platform does not solicit work or advertise on behalf of advocates.',
+      q: 'Are the lawyers on ZipAdvo employees of the platform?',
+      a: 'No. ZipAdvo is a technology intermediary platform. All listed advocates are independent legal practitioners enrolled with the Bar Council of Maharashtra & Goa. In accordance with Bar Council of India rules, the platform does not solicit work or advertise on behalf of advocates.',
     },
     {
       q: 'What if the lawyer I unlocked does not respond?',
@@ -123,7 +122,7 @@ export default function HowItWorksPage() {
     },
     {
       q: 'Is my property documentation kept confidential?',
-      a: 'Absolutely. Documents uploaded to LegalHubMumbai are encrypted at rest (AES-256) and in transit (TLS 1.3). Only you and the specific advocate you explicitly authorize can access your documents. We do not sell or share data with builders, banks, or marketing entities.',
+      a: 'Absolutely. Documents uploaded to ZipAdvo are encrypted at rest (AES-256) and in transit (TLS 1.3). Only you and the specific advocate you explicitly authorize can access your documents. We do not sell or share data with builders, banks, or marketing entities.',
     },
   ];
 
@@ -140,7 +139,7 @@ export default function HowItWorksPage() {
               Transparent & BCI-Compliant Process
             </Badge>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900">
-              How LegalHubMumbai Works
+              How ZipAdvo Works
             </h1>
             <p className="text-lg text-slate-600 leading-relaxed">
               We eliminate broker markups and unverified touts by giving you direct, secure access to
@@ -199,7 +198,7 @@ export default function HowItWorksPage() {
               Why Direct Facilitation Beats Traditional Routes
             </h2>
             <p className="text-sm sm:text-base text-slate-600">
-              A clear comparison between unvetted broker arrangements and LegalHubMumbai’s verified network.
+              A clear comparison between unvetted broker arrangements and ZipAdvo’s verified network.
             </p>
           </div>
 
@@ -209,7 +208,7 @@ export default function HowItWorksPage() {
                 <tr>
                   <th className="p-4 sm:px-6">Feature</th>
                   <th className="p-4 sm:px-6 text-slate-500">Traditional / Broker Route</th>
-                  <th className="p-4 sm:px-6 text-blue-800 bg-blue-50/50">LegalHubMumbai</th>
+                  <th className="p-4 sm:px-6 text-blue-800 bg-blue-50/50">ZipAdvo</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">

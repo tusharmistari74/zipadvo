@@ -17,8 +17,8 @@ export default function AdminSettingsPage() {
   const [minimumWithdrawal, setMinimumWithdrawal] = useState<number>(500);
   const [platformVersion, setPlatformVersion] = useState<string>('1.0.0');
   const [maintenanceMode, setMaintenanceMode] = useState<boolean>(false);
-  const [supportEmail, setSupportEmail] = useState<string>('support@legalhubmumbai.com');
-  const [supportPhone, setSupportPhone] = useState<string>('+91 22 2265 4321');
+  const [supportEmail, setSupportEmail] = useState<string>('zipadvo@gmail.com');
+  const [supportPhone, setSupportPhone] = useState<string>('+91 77689 42390');
   const [updateReason, setUpdateReason] = useState<string>('');
 
   const fetchSettings = async () => {
@@ -39,8 +39,8 @@ export default function AdminSettingsPage() {
         setMinimumWithdrawal(data.settings.minimumWithdrawal ?? 500);
         setPlatformVersion(data.settings.platformVersion ?? '1.0.0');
         setMaintenanceMode(Boolean(data.settings.maintenanceMode));
-        setSupportEmail(data.settings.supportEmail || 'support@legalhubmumbai.com');
-        setSupportPhone(data.settings.supportPhone || '+91 22 2265 4321');
+        setSupportEmail(data.settings.supportEmail || 'zipadvo@gmail.com');
+        setSupportPhone(data.settings.supportPhone || '+91 77689 42390');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error loading settings');
@@ -104,7 +104,16 @@ export default function AdminSettingsPage() {
         throw new Error(data.error || 'Failed to update platform settings');
       }
 
-      setSuccess('Platform settings updated successfully and logged to audit trail.');
+      if (typeof window !== 'undefined' && data.settings) {
+        try {
+          localStorage.setItem('zipadvo_platform_settings', JSON.stringify(data.settings));
+          window.dispatchEvent(new CustomEvent('zipadvo_settings_updated', { detail: data.settings }));
+        } catch {
+          // Ignore
+        }
+      }
+
+      setSuccess('Platform settings updated successfully and broadcasted in real time.');
       setUpdateReason('');
       fetchSettings();
     } catch (err) {

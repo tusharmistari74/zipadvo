@@ -16,11 +16,11 @@ import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'For Lawyers | Join LegalHubMumbai - Verified Advocate Network',
+  title: 'For Lawyers | Join ZipAdvo - Verified Advocate Network',
   description:
     'Join Mumbai’s dedicated property and conveyancing legal network. Connect with high-intent property buyers, manage clients seamlessly, and maintain 100% of your legal fees.',
   openGraph: {
-    title: 'Join LegalHubMumbai as a Verified Property Advocate',
+    title: 'Join ZipAdvo as a Verified Property Advocate',
     description:
       'Connect with clients needing title search reports, sale deed drafting, and sub-registrar assistance in Mumbai. BCI-compliant platform with zero fee cuts.',
   },
@@ -91,8 +91,8 @@ export default function ForLawyersPage() {
 
   const faqs = [
     {
-      q: 'Does LegalHubMumbai charge advocates a percentage of legal fees?',
-      a: 'No. LegalHubMumbai operates on a strict zero-commission model for advocate fees. Clients pay a small ₹299 facilitation unlock fee to the platform, while your professional consultation, drafting, and conveyance fees are settled directly between you and your client.',
+      q: 'Does ZipAdvo charge advocates a percentage of legal fees?',
+      a: 'No. ZipAdvo operates on a strict zero-commission model for advocate fees. Clients pay a small ₹299 facilitation unlock fee to the platform, while your professional consultation, drafting, and conveyance fees are settled directly between you and your client.',
     },
     {
       q: 'How does the platform ensure compliance with Bar Council of India rules?',
@@ -271,7 +271,7 @@ export default function ForLawyersPage() {
             <div className="pt-8 text-center">
               <Link href="/register?role=lawyer">
                 <Button variant="primary" size="lg" rightIcon={<ArrowRight className="h-4 w-4" />}>
-                  Join LegalHubMumbai as an Advocate
+                  Join ZipAdvo as an Advocate
                 </Button>
               </Link>
             </div>

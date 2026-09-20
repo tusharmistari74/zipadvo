@@ -19,8 +19,8 @@ export const DEFAULT_PLATFORM_SETTINGS: PlatformSettings = {
   commissionRate: 10,
   unlockFee: 299,
   minimumWithdrawal: 500,
-  supportEmail: 'support@legalhubmumbai.com',
-  supportPhone: '+91 22 2265 4321',
+  supportEmail: 'zipadvo@gmail.com',
+  supportPhone: '+91 77689 42390',
   platformVersion: '1.0.0',
 
   // Backward compatibility & operational settings
@@ -58,6 +58,27 @@ export async function getPlatformSettings(): Promise<PlatformSettings> {
     return { ...cachedSettings };
   }
 
+  // 1. Check client browser localStorage for immediate real-time sync
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('zipadvo_platform_settings');
+      if (stored) {
+        const parsed = JSON.parse(stored) as Partial<PlatformSettings>;
+        cachedSettings = {
+          ...DEFAULT_PLATFORM_SETTINGS,
+          ...parsed,
+          fees: {
+            ...DEFAULT_PLATFORM_SETTINGS.fees,
+            ...(parsed.fees || {}),
+          },
+        };
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  // 2. Fetch from Firestore if available
   try {
     const docRef = doc(db, COLLECTIONS.PLATFORM_SETTINGS, 'global_settings');
     const snap = await getDoc(docRef);
@@ -72,6 +93,15 @@ export async function getPlatformSettings(): Promise<PlatformSettings> {
           ...(data.fees || {}),
         },
       };
+
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('zipadvo_platform_settings', JSON.stringify(cachedSettings));
+        } catch {
+          // Ignore
+        }
+      }
+
       return { ...cachedSettings };
     }
   } catch {
@@ -105,12 +135,12 @@ export async function getMinimumWithdrawal(): Promise<number> {
 
 export async function getSupportEmail(): Promise<string> {
   const settings = await getPlatformSettings();
-  return settings.supportEmail || 'support@legalhubmumbai.com';
+  return settings.supportEmail || 'zipadvo@gmail.com';
 }
 
 export async function getSupportPhone(): Promise<string> {
   const settings = await getPlatformSettings();
-  return settings.supportPhone || '+91 22 2265 4321';
+  return settings.supportPhone || '+91 77689 42390';
 }
 
 export async function getPlatformVersion(): Promise<string> {
@@ -348,11 +378,15 @@ export async function updatePlatformSettings(params: {
     }
   }
 
-  logger.info('Platform configuration updated successfully', {
-    adminUid,
-    changesCount: changes.length,
-    reason: effectiveReason,
-  });
+  // 7. Client-side storage sync and event broadcast
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem('zipadvo_platform_settings', JSON.stringify(updatedSettings));
+      window.dispatchEvent(new CustomEvent('zipadvo_settings_updated', { detail: updatedSettings }));
+    } catch {
+      // Ignore
+    }
+  }
 
   return {
     success: true,

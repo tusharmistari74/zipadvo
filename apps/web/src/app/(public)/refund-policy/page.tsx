@@ -6,9 +6,9 @@ import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'Refund Policy | LegalHubMumbai - ₹299 Facilitation Guarantee',
+  title: 'Refund Policy | ZipAdvo - ₹299 Facilitation Guarantee',
   description:
-    'Review the transparent refund policy for LegalHubMumbai’s ₹299 platform facilitation fee. 100% money-back guarantee if an advocate is unresponsive within 24 hours.',
+    'Review the transparent refund policy for ZipAdvo’s ₹299 platform facilitation fee. 100% money-back guarantee if an advocate is unresponsive within 24 hours.',
 };
 
 export default function RefundPolicyPage() {
@@ -66,7 +66,7 @@ export default function RefundPolicyPage() {
               Refund & Cancellation Policy
             </h1>
             <p className="text-sm text-slate-500">
-              Effective Date: September 12, 2026 | Last Updated: September 12, 2026
+              Effective Date: September 12, 2026 | Last Updated: September 20, 2026
             </p>
           </div>
         </Container>
@@ -82,7 +82,7 @@ export default function RefundPolicyPage() {
                 1. Overview of the ₹299 Facilitation Fee
               </h2>
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                LegalHubMumbai charges a one-time facilitation unlock fee of ₹299 per lawyer match. This fee maintains our verified Bar Council directory, secures encrypted document storage, and covers direct connectivity. We are committed to a fair and prompt refund process if our service commitments are not met.
+                ZipAdvo charges a one-time facilitation unlock fee of ₹299 per lawyer match. This fee maintains our verified Bar Council directory, secures encrypted document storage, and covers direct connectivity. We are committed to a fair and prompt refund process if our service commitments are not met.
               </p>
             </div>
 
@@ -137,7 +137,7 @@ export default function RefundPolicyPage() {
                     1
                   </div>
                   <div>
-                    <strong className="text-slate-900">Submit Request:</strong> Request a refund from your Client Dashboard under &quot;Booking History&quot; or email <code>refunds@legalhubmumbai.com</code> with your Booking ID.
+                    <strong className="text-slate-900">Submit Request:</strong> Request a refund from your Client Dashboard under &quot;Booking History&quot; or email <code>zipadvo@gmail.com</code> with your Booking ID.
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

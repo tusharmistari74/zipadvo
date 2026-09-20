@@ -415,7 +415,7 @@ export default function LawyerKycPage() {
                 Verification Complete & Profile Live
               </h1>
               <p className="text-sm text-slate-600">
-                Your Bar Council Sanad credentials have been verified. Your profile is active on the LegalHubMumbai discovery directory.
+                Your Bar Council Sanad credentials have been verified. Your profile is active on the ZipAdvo discovery directory.
               </p>
             </div>
 

@@ -316,7 +316,7 @@ export default function ClientDashboardPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
             <div>
               <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-                <Link href="/" className="hover:text-blue-900">LegalHubMumbai</Link>
+                <Link href="/" className="hover:text-blue-900">ZipAdvo</Link>
                 <span>/</span>
                 <span className="text-slate-800 font-medium">Client Portal</span>
               </div>
@@ -1037,7 +1037,7 @@ export default function ClientDashboardPage() {
               <Card className="border-slate-200 bg-white p-6 space-y-4">
                 <div>
                   <h3 className="text-base font-bold text-slate-900">Notification Preferences</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">Control how LegalHubMumbai reaches you for case alerts.</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Control how ZipAdvo reaches you for case alerts.</p>
                 </div>
 
                 <div className="divide-y divide-slate-100 text-xs">

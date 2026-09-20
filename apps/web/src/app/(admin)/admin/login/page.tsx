@@ -11,8 +11,8 @@ import { mapFirebaseAuthError } from '../../../../lib/auth/errors';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState(PRIMARY_ADMIN_CREDENTIAL.email);
-  const [password, setPassword] = useState(PRIMARY_ADMIN_CREDENTIAL.password);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -72,9 +72,9 @@ export default function AdminLoginPage() {
                 Restricted Governance Area
               </Badge>
             </div>
-            <CardTitle className="text-2xl font-bold text-white">Admin Direct Access</CardTitle>
+            <CardTitle className="text-2xl font-bold text-white">ZipAdvo Admin Console</CardTitle>
             <CardDescription className="text-slate-400">
-              LegalHubMumbai platform governance, verification & escrow control
+              Executive platform governance, KYC verification & dispute arbitration
             </CardDescription>
           </CardHeader>
 
@@ -96,7 +96,7 @@ export default function AdminLoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="tusharmistari782@gmail.com"
+                  placeholder="admin@zipadvo.com"
                   className="w-full rounded-lg border border-slate-600 bg-slate-900/80 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
@@ -110,7 +110,7 @@ export default function AdminLoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
+                  placeholder="Enter administrator password"
                   className="w-full rounded-lg border border-slate-600 bg-slate-900/80 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>

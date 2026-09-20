@@ -40,7 +40,7 @@ export default function VerifyAccountPage() {
             </div>
             <CardTitle className="text-2xl font-bold text-slate-900">Verify Your Account</CardTitle>
             <CardDescription>
-              Confirm your identity to unlock all LegalHubMumbai features
+              Confirm your identity to unlock all ZipAdvo features
             </CardDescription>
           </CardHeader>
 

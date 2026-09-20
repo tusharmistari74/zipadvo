@@ -4,8 +4,8 @@ import { AuthProvider } from '../lib/auth/context';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'LegalHubMumbai | Verified Property & Document Registration Lawyers',
-  description: 'Connect with verified property & conveyancing lawyers in Mumbai.',
+  title: 'ZipAdvo | Verified Property & Legal Registration Advocates Network',
+  description: 'Connect with Bar Council verified property & conveyancing advocates in Mumbai for title search, deed registration, and legal consultations.',
 };
 
 const RECAPTCHA_KEY =

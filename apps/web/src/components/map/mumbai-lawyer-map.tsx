@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Card, Badge, Rating, Button, Avatar } from '@legalhub/ui';
-import { MapPin, Navigation, Scale, ShieldCheck, ChevronRight, X } from 'lucide-react';
+import { MapPin, Navigation, Scale, ShieldCheck, ChevronRight, X, Compass, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
 export interface LawyerMarkerItem {
@@ -21,6 +21,7 @@ export interface LawyerMarkerItem {
   lng: number;
   specialties: string[];
   consultationFee: number;
+  distanceKm?: number;
 }
 
 export interface MumbaiLawyerMapProps {
@@ -30,20 +31,39 @@ export interface MumbaiLawyerMapProps {
   className?: string;
 }
 
-// Pre-defined Mumbai Court Cluster hubs with coordinates
+// Calculate real-world geodesic distance in km using Haversine formula
+function calculateDistanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Earth radius in km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return Math.round(R * c * 10) / 10;
+}
+
+// Pre-defined Mumbai Court Cluster hubs with real coordinates
 const MUMBAI_COURT_HUBS = [
   {
     id: 'bost-hc',
-    name: 'Bombay High Court & City Civil (Fort)',
+    name: 'Bombay High Court & Fort Chambers',
     region: 'south',
+    lat: 18.9298,
+    lng: 72.8335,
     x: 48,
     y: 82,
     count: 38,
   },
   {
     id: 'maharera-bkc',
-    name: 'MahaRERA & BKC Commercial Appellate',
+    name: 'MahaRERA Tribunal & BKC Chambers',
     region: 'western',
+    lat: 19.0657,
+    lng: 72.8687,
     x: 52,
     y: 58,
     count: 24,
@@ -52,6 +72,8 @@ const MUMBAI_COURT_HUBS = [
     id: 'bandra-court',
     name: 'Bandra Metropolitan & Family Court',
     region: 'western',
+    lat: 19.0596,
+    lng: 72.8295,
     x: 44,
     y: 52,
     count: 19,
@@ -60,6 +82,8 @@ const MUMBAI_COURT_HUBS = [
     id: 'dindoshi-court',
     name: 'Dindoshi & Borivali City Civil Court',
     region: 'western',
+    lat: 19.1663,
+    lng: 72.8526,
     x: 46,
     y: 30,
     count: 27,
@@ -68,6 +92,8 @@ const MUMBAI_COURT_HUBS = [
     id: 'kurla-court',
     name: 'Kurla & Ghatkopar Civil Court',
     region: 'eastern',
+    lat: 19.086,
+    lng: 72.908,
     x: 62,
     y: 48,
     count: 16,
@@ -76,6 +102,8 @@ const MUMBAI_COURT_HUBS = [
     id: 'thane-court',
     name: 'Thane District & Sessions Court',
     region: 'thane',
+    lat: 19.2183,
+    lng: 72.9781,
     x: 74,
     y: 24,
     count: 31,
@@ -90,6 +118,37 @@ export function MumbaiLawyerMap({
 }: MumbaiLawyerMapProps) {
   const [activeHub, setActiveHub] = useState<string | null>(null);
   const [activeLawyer, setActiveLawyer] = useState<LawyerMarkerItem | null>(null);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationStatus, setLocationStatus] = useState<string | null>(null);
+  const [maxDistanceKm, setMaxDistanceKm] = useState<number | null>(null);
+
+  // Auto-request or user-triggered geolocation
+  const handleLocateClient = () => {
+    if (!navigator.geolocation) {
+      setLocationStatus('Geolocation is not supported by your browser.');
+      return;
+    }
+    setIsLocating(true);
+    setLocationStatus('Locating your GPS coordinates in Mumbai...');
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setUserLocation(coords);
+        setIsLocating(false);
+        setLocationStatus('GPS Locked: Showing nearest advocates & chambers');
+        setMaxDistanceKm(25); // Default to 25km nearby radius
+      },
+      () => {
+        // Fallback to Central Mumbai (Bandra / BKC)
+        setUserLocation({ lat: 19.0596, lng: 72.8295 });
+        setIsLocating(false);
+        setLocationStatus('Defaulted to Bandra / Central Mumbai region.');
+      },
+      { timeout: 8000, enableHighAccuracy: true }
+    );
+  };
 
   // Filter hubs based on selected region
   const filteredHubs = useMemo(() => {
@@ -97,34 +156,105 @@ export function MumbaiLawyerMap({
     return MUMBAI_COURT_HUBS.filter((h) => h.region === selectedRegion);
   }, [selectedRegion]);
 
-  // Compute active advocates in selected hub or region
+  // Compute active advocates in selected hub or region and sort by distance if location available
   const visibleLawyers = useMemo(() => {
+    let list = [...lawyers];
     if (activeHub) {
       const hub = MUMBAI_COURT_HUBS.find((h) => h.id === activeHub);
-      if (!hub) return lawyers;
-      return lawyers.filter((l) => l.region === hub.region);
+      if (hub) {
+        list = list.filter((l) => l.region === hub.region);
+      }
+    } else if (selectedRegion !== 'all') {
+      list = list.filter((l) => l.region === selectedRegion);
     }
-    if (selectedRegion !== 'all') {
-      return lawyers.filter((l) => l.region === selectedRegion);
+
+    if (userLocation) {
+      list = list
+        .map((lawyer) => ({
+          ...lawyer,
+          distanceKm: calculateDistanceKm(userLocation.lat, userLocation.lng, lawyer.lat, lawyer.lng),
+        }))
+        .sort((a, b) => (a.distanceKm ?? 0) - (b.distanceKm ?? 0));
+
+      if (maxDistanceKm) {
+        const nearbyOnly = list.filter((l) => (l.distanceKm ?? 0) <= maxDistanceKm);
+        if (nearbyOnly.length > 0) return nearbyOnly;
+      }
     }
-    return lawyers;
-  }, [activeHub, selectedRegion, lawyers]);
+
+    return list;
+  }, [activeHub, selectedRegion, lawyers, userLocation, maxDistanceKm]);
+
+  // Select first lawyer by default if none active
+  useEffect(() => {
+    if (!activeLawyer && visibleLawyers.length > 0) {
+      setActiveLawyer(visibleLawyers[0] || null);
+    }
+  }, [visibleLawyers, activeLawyer]);
 
   return (
     <Card className={`overflow-hidden border-slate-200 bg-slate-900 text-white shadow-md ${className}`}>
       {/* Map Header Controls */}
-      <div className="flex flex-wrap items-center justify-between border-b border-slate-800 bg-slate-950/80 px-4 py-3 gap-2">
+      <div className="flex flex-wrap items-center justify-between border-b border-slate-800 bg-slate-950/90 px-4 py-3 gap-2">
         <div className="flex items-center gap-2">
           <Navigation className="h-4 w-4 text-blue-400" />
-          <span className="text-xs font-bold tracking-wider uppercase text-slate-300">
-            Mumbai Metropolitan Jurisdiction Map
+          <span className="text-xs font-bold tracking-wider uppercase text-slate-200">
+            ZipAdvo Real-Life Mumbai Jurisdiction Map
           </span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-slate-400">
-          <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>{filteredHubs.length} Court Jurisdictions • {visibleLawyers.length} Advocates Active</span>
+
+        <div className="flex items-center gap-2">
+          {/* Locate Me GPS CTA */}
+          <button
+            type="button"
+            onClick={handleLocateClient}
+            disabled={isLocating}
+            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 text-xs font-semibold transition-all focus:outline-none"
+          >
+            <Compass className={`h-3.5 w-3.5 ${isLocating ? 'animate-spin' : 'text-blue-400'}`} />
+            <span>{isLocating ? 'Locating...' : userLocation ? 'Nearby Advocates Active' : '📍 Find Lawyers Near Me'}</span>
+          </button>
+
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 pl-2">
+            <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>{visibleLawyers.length} Verified Advocates</span>
+          </div>
         </div>
       </div>
+
+      {locationStatus && (
+        <div className="bg-blue-950/50 border-b border-blue-900/50 px-4 py-1.5 text-[11px] text-blue-300 flex items-center justify-between">
+          <span className="flex items-center gap-1.5">
+            <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+            {locationStatus}
+          </span>
+          {userLocation && (
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setMaxDistanceKm(10)}
+                className={`px-1.5 py-0.5 rounded text-[10px] ${maxDistanceKm === 10 ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              >
+                Within 10 km
+              </button>
+              <button
+                type="button"
+                onClick={() => setMaxDistanceKm(25)}
+                className={`px-1.5 py-0.5 rounded text-[10px] ${maxDistanceKm === 25 ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              >
+                Within 25 km
+              </button>
+              <button
+                type="button"
+                onClick={() => setMaxDistanceKm(null)}
+                className={`px-1.5 py-0.5 rounded text-[10px] ${maxDistanceKm === null ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+              >
+                All Mumbai MMR
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Interactive Map Visual Stage */}
       <div className="relative min-h-[380px] sm:min-h-[420px] bg-radial from-slate-900 to-slate-950 p-6 flex flex-col justify-between select-none">
@@ -135,6 +265,8 @@ export function MumbaiLawyerMap({
         <div className="relative w-full h-[320px] max-w-2xl mx-auto my-auto">
           {filteredHubs.map((hub) => {
             const isSelected = activeHub === hub.id;
+            const distance = userLocation ? calculateDistanceKm(userLocation.lat, userLocation.lng, hub.lat, hub.lng) : null;
+
             return (
               <div
                 key={hub.id}
@@ -165,10 +297,16 @@ export function MumbaiLawyerMap({
                   }`}
                 >
                   <Scale className="h-3 w-3 text-blue-400" />
-                  <span className="truncate max-w-[130px] sm:max-w-[180px]">{hub.name.split('&')[0]}</span>
-                  <span className="bg-blue-950/80 text-blue-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">
-                    {hub.count}
-                  </span>
+                  <span className="truncate max-w-[120px] sm:max-w-[170px]">{hub.name.split('&')[0]}</span>
+                  {distance !== null ? (
+                    <span className="bg-emerald-950 text-emerald-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">
+                      {distance} km
+                    </span>
+                  ) : (
+                    <span className="bg-blue-950/80 text-blue-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">
+                      {hub.count}
+                    </span>
+                  )}
                 </div>
               </div>
             );
@@ -188,6 +326,11 @@ export function MumbaiLawyerMap({
                       <ShieldCheck className="h-3 w-3 mr-1" />
                       Sanad Verified
                     </Badge>
+                    {userLocation && (
+                      <span className="inline-flex items-center rounded-full bg-blue-900/60 border border-blue-700 px-2 py-0.5 text-[10px] font-semibold text-blue-200">
+                        📍 {calculateDistanceKm(userLocation.lat, userLocation.lng, activeLawyer.lat, activeLawyer.lng)} km near you
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-300">{activeLawyer.title}</p>
                   <div className="flex items-center gap-3 text-[11px] text-slate-400 pt-0.5">
@@ -202,13 +345,14 @@ export function MumbaiLawyerMap({
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                <Link href="/register">
-                  <Button variant="primary" size="sm">
-                    <span>Unlock ₹299</span>
+                <Link href={`/lawyers/${activeLawyer.id}`}>
+                  <Button variant="primary" size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    <span>View Profile & Book</span>
                     <ChevronRight className="h-3.5 w-3.5 ml-1" />
                   </Button>
                 </Link>
                 <button
+                  type="button"
                   onClick={() => setActiveLawyer(null)}
                   className="rounded-lg p-1 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
                   aria-label="Close advocate preview"
@@ -232,9 +376,10 @@ export function MumbaiLawyerMap({
               <span>Verified Bar Council Advocates</span>
             </span>
           </div>
-          <span>Click any court cluster to view accredited advocates</span>
+          <span>Click any court cluster or use &quot;Find Lawyers Near Me&quot;</span>
         </div>
       </div>
     </Card>
   );
 }
+

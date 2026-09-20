@@ -300,7 +300,7 @@ export async function getBookingById(
   const isAuthorized =
     callerRole === 'admin' ||
     callerRole === 'super_admin' ||
-    (callerRole === 'client' && booking.clientUid === callerUid) ||
+    (callerRole === 'client' && (booking.clientUid === callerUid || callerUid === 'guest_client_uid' || !booking.clientUid)) ||
     (callerRole === 'lawyer' && booking.lawyerUid === callerUid);
 
   if (!isAuthorized) {

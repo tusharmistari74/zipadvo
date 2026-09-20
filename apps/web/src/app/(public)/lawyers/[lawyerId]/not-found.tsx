@@ -25,7 +25,7 @@ export default function LawyerNotFound() {
                   Advocate Profile Not Found
                 </h1>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  The requested advocate profile does not exist or has not yet completed Bar Council verification on LegalHubMumbai.
+                  The requested advocate profile does not exist or has not yet completed Bar Council verification on ZipAdvo.
                 </p>
               </div>
 

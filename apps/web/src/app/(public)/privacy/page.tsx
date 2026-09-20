@@ -5,9 +5,9 @@ import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | LegalHubMumbai - Data Protection & DPDP Compliance',
+  title: 'Privacy Policy | ZipAdvo - Data Protection & DPDP Compliance',
   description:
-    'Learn how LegalHubMumbai protects your personal data, identity proofs, and property documents in accordance with the Digital Personal Data Protection Act (DPDP), 2023.',
+    'Learn how ZipAdvo protects your personal data, identity proofs, and property documents in accordance with the Digital Personal Data Protection Act (DPDP), 2023.',
 };
 
 export default function PrivacyPolicyPage() {
@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
               Privacy Policy
             </h1>
             <p className="text-sm text-slate-500">
-              Effective Date: September 12, 2026 | Last Updated: September 12, 2026
+              Effective Date: September 12, 2026 | Last Updated: September 20, 2026
             </p>
           </div>
         </Container>
@@ -40,15 +40,15 @@ export default function PrivacyPolicyPage() {
             <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm">
               <p className="font-semibold flex items-center gap-1.5 mb-1">
                 <AlertCircle className="h-4 w-4 text-amber-700 shrink-0" />
-                Legal Notice & Statutory Placeholder
+                Legal Notice & Statutory Compliance
               </p>
-              This Privacy Policy reflects LegalHubMumbai’s operational data architecture under the Digital Personal Data Protection Act, 2023 (DPDP Act) and the Information Technology Act, 2000. It is subject to ongoing statutory review by platform legal counsel.
+              This Privacy Policy reflects ZipAdvo’s operational data architecture under the Digital Personal Data Protection Act, 2023 (DPDP Act) and the Information Technology Act, 2000. It is subject to ongoing statutory review by platform legal counsel.
             </div>
 
             <section className="space-y-3">
               <h2 className="font-serif text-xl font-bold text-slate-900">1. Introduction</h2>
               <p className="text-slate-600">
-                LegalHubMumbai (&quot;Platform&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) is committed to protecting the privacy, confidentiality, and security of our users (&quot;Clients&quot;) and verified legal practitioners (&quot;Advocates&quot;). This Privacy Policy explains our practices regarding the collection, use, storage, disclosure, and protection of personal data and confidential property documentation.
+                ZipAdvo (&quot;Platform&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) is committed to protecting the privacy, confidentiality, and security of our users (&quot;Clients&quot;) and verified legal practitioners (&quot;Advocates&quot;). This Privacy Policy explains our practices regarding the collection, use, storage, disclosure, and protection of personal data and confidential property documentation.
               </p>
             </section>
 
@@ -124,9 +124,9 @@ export default function PrivacyPolicyPage() {
                 In accordance with the Information Technology Act, 2000 and DPDP Act, 2023, the details of the Grievance Officer are provided below:
               </p>
               <div className="p-4 rounded-lg border border-slate-200 bg-slate-50 text-xs sm:text-sm space-y-1 text-slate-700">
-                <p><strong>Name:</strong> Grievance Redressal Officer, LegalHubMumbai</p>
-                <p><strong>Email:</strong> grievance@legalhubmumbai.com</p>
-                <p><strong>Address:</strong> Fort Chambers, Nagindas Master Road, Fort, Mumbai, Maharashtra 400001</p>
+                <p><strong>Name:</strong> Grievance Redressal Officer, ZipAdvo</p>
+                <p><strong>Email:</strong> zipadvo@gmail.com</p>
+                <p><strong>Address:</strong> Nandanvan appartment, bus stop, 13, Kalyan-Murbad Rd, near prem auto, Purnima, Kalyan, Maharashtra 421301</p>
                 <p><strong>Response Timeline:</strong> Within 48 hours of receipt of grievance</p>
               </div>
             </section>

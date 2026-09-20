@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: LawyerProfilePageProps): Prom
 
   if (!profile) {
     return {
-      title: 'Advocate Profile Not Found | LegalHubMumbai',
+      title: 'Advocate Profile Not Found | ZipAdvo',
       description: 'The requested lawyer profile could not be found or is not currently active for public discovery.',
       robots: {
         index: false,

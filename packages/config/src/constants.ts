@@ -2,8 +2,8 @@
  * Application Constants & Route Definitions
  */
 
-export const APP_NAME = 'LegalHubMumbai' as const;
-export const APP_TAGLINE = 'Verified Property & Document Registration Lawyers in Mumbai' as const;
+export const APP_NAME = 'ZipAdvo' as const;
+export const APP_TAGLINE = 'Verified Property & Document Registration Lawyers' as const;
 
 export const DEFAULT_CONSULTATION_UNLOCK_FEE_INR = 299 as const;
 export const GST_RATE = 0.18 as const;

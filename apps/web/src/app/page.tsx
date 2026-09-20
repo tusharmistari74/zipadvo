@@ -17,9 +17,9 @@ import {
 } from 'lucide-react';
 
 export const metadata = {
-  title: 'LegalHubMumbai | Verified Property & Document Registration Lawyers in Mumbai',
+  title: 'ZipAdvo | Verified Property & Document Registration Advocates in Mumbai',
   description:
-    'Connect with Bar Council verified property, conveyance, and registration lawyers in Mumbai. Fixed ₹299 consultation unlock fee with encrypted document review.',
+    'Connect with Bar Council verified property, conveyance, and registration advocates in Mumbai. Fixed ₹299 consultation unlock fee with encrypted document review.',
 };
 
 export default function HomePage() {
@@ -91,7 +91,7 @@ export default function HomePage() {
 
   const faqs = [
     {
-      q: 'How does LegalHubMumbai verify lawyers?',
+      q: 'How does ZipAdvo verify lawyers?',
       a: 'Every advocate on our platform is individually verified against the Bar Council of Maharashtra and Goa registry using their Sanad number. We also verify court practice records, identity documents, and chamber office addresses.',
     },
     {
@@ -200,7 +200,7 @@ export default function HomePage() {
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <Badge variant="brand">Simple 3-Step Process</Badge>
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-slate-900">
-              How LegalHubMumbai Works
+              How ZipAdvo Works
             </h2>
             <p className="text-sm text-slate-600">
               Transparent, professional, and secure legal engagement for your Mumbai property needs.
@@ -338,8 +338,8 @@ export default function HomePage() {
 
                 <CardContent className="pt-0 border-t border-slate-100 mt-2 flex items-center justify-between">
                   <Rating value={lawyer.rating} reviewCount={lawyer.reviewCount} showText size="sm" />
-                  <Link href={`/find-lawyer`}>
-                    <Button variant="primary" size="sm">
+                  <Link href={`/lawyers/${lawyer.id}`}>
+                    <Button variant="primary" size="sm" className="bg-blue-600 hover:bg-blue-700">
                       Consult (₹299)
                     </Button>
                   </Link>
@@ -388,7 +388,7 @@ export default function HomePage() {
               Frequently Asked Questions
             </h2>
             <p className="text-sm text-slate-600">
-              Everything you need to know about LegalHubMumbai discovery and booking.
+              Everything you need to know about ZipAdvo discovery and booking.
             </p>
           </div>
 

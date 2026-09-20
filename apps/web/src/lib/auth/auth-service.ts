@@ -66,7 +66,8 @@ export function clearLocalAuthSession(): void {
 
 export const AUTHORIZED_SUPER_ADMIN_EMAILS = [
   'tusharmistari782@gmail.com',
-  'admin@legalhubmumbai.com',
+  'zipadvo@gmail.com',
+  'admin@zipadvo.com',
 ];
 
 export const PRIMARY_ADMIN_CREDENTIAL = {
