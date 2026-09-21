@@ -23,6 +23,7 @@ import { useAuth } from '../../../../lib/auth/context';
 import { Navbar } from '../../../../components/layout/navbar';
 import { Footer } from '../../../../components/layout/footer';
 import { AdminPortalNav } from '../../../../components/admin/admin-portal-nav';
+import { AdminGuard } from '../../../../components/admin/admin-guard';
 import type {
   BusinessAnalyticsDashboardData,
   AnalyticsTimePeriod,
@@ -84,7 +85,8 @@ export default function AdminAnalyticsPage() {
   const isSample = data?.isSampleData;
 
   return (
-    <div className="min-h-screen bg-slate-50/60">
+    <AdminGuard>
+      <div className="min-h-screen bg-slate-50/60">
       <Navbar />
       <AdminPortalNav
         pendingKycCount={metrics?.pendingVerificationLawyers || 0}
@@ -418,7 +420,8 @@ export default function AdminAnalyticsPage() {
         </Container>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </AdminGuard>
   );
 }

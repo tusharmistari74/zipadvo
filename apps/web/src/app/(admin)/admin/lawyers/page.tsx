@@ -25,6 +25,7 @@ import {
 import { useAuth } from '../../../../lib/auth/context';
 import { Navbar } from '../../../../components/layout/navbar';
 import { Footer } from '../../../../components/layout/footer';
+import { AdminGuard } from '../../../../components/admin/admin-guard';
 import {
   listAdminLawyers,
   type AdminLawyerListItem,
@@ -83,14 +84,16 @@ export default function AdminLawyersListPage() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50">
-        <Navbar />
-        <Container className="py-24 text-center">
-          <Spinner size="lg" className="mx-auto text-blue-700" />
-          <p className="text-sm text-slate-600 mt-4">Loading verification queue...</p>
-        </Container>
-        <Footer />
-      </div>
+      <AdminGuard>
+        <div className="min-h-screen bg-slate-50">
+          <Navbar />
+          <Container className="py-24 text-center">
+            <Spinner size="lg" className="mx-auto text-blue-700" />
+            <p className="text-sm text-slate-600 mt-4">Loading verification queue...</p>
+          </Container>
+          <Footer />
+        </div>
+      </AdminGuard>
     );
   }
 

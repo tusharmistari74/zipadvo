@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AdminPortalNav } from '@/components/admin/admin-portal-nav';
+import { AdminGuard } from '@/components/admin/admin-guard';
 import type { PlatformSettings } from '@legalhub/types';
 
 export default function AdminSettingsPage() {
@@ -124,28 +125,29 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans pb-16">
-      {/* Header */}
-      <header className="bg-slate-950 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                  Global Configuration
-                </span>
-                <span className="text-xs text-slate-400">Phase 20 Settings Engine</span>
+    <AdminGuard>
+      <div className="min-h-screen bg-slate-900 text-slate-100 font-sans pb-16">
+        {/* Header */}
+        <header className="bg-slate-950 border-b border-slate-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                    Global Configuration
+                  </span>
+                  <span className="text-xs text-slate-400">Phase 20 Settings Engine</span>
+                </div>
+                <h1 className="text-2xl font-bold tracking-tight text-white mt-1">
+                  Platform Financial & System Configuration
+                </h1>
+                <p className="text-sm text-slate-400 mt-0.5">
+                  Configure consultation unlock fees, commission percentages, lawyer withdrawal thresholds, support contacts, and system version.
+                </p>
               </div>
-              <h1 className="text-2xl font-bold tracking-tight text-white mt-1">
-                Platform Financial & System Configuration
-              </h1>
-              <p className="text-sm text-slate-400 mt-0.5">
-                Configure consultation unlock fees, commission percentages, lawyer withdrawal thresholds, support contacts, and system version.
-              </p>
             </div>
           </div>
-        </div>
-      </header>
+        </header>
 
       {/* Sub Navigation */}
       <AdminPortalNav />
@@ -351,5 +353,6 @@ export default function AdminSettingsPage() {
         )}
       </main>
     </div>
+  </AdminGuard>
   );
 }

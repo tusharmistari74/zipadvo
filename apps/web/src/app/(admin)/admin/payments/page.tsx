@@ -27,6 +27,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { useAuth } from '../../../../lib/auth/context';
+import { AdminGuard } from '../../../../components/admin/admin-guard';
 import { getAdminPaymentHistory } from '../../../../lib/services/payment.service';
 import type { PaymentTransaction, PaymentStatus } from '@legalhub/types';
 import { formatDate, formatINR } from '@legalhub/utils';
@@ -169,7 +170,8 @@ export default function AdminPaymentsPage() {
   };
 
   return (
-    <main className="min-h-screen p-4 sm:p-8 bg-slate-50">
+    <AdminGuard>
+      <main className="min-h-screen bg-slate-50 py-8">
       <Container className="space-y-6 max-w-7xl mx-auto">
         {/* Header Breadcrumb & Title */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -515,5 +517,6 @@ export default function AdminPaymentsPage() {
         </Dialog>
       </Container>
     </main>
+  </AdminGuard>
   );
 }

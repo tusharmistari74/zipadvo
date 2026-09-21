@@ -24,6 +24,7 @@ import { useAuth } from '../../../../lib/auth/context';
 import { Navbar } from '../../../../components/layout/navbar';
 import { Footer } from '../../../../components/layout/footer';
 import { AdminPortalNav } from '../../../../components/admin/admin-portal-nav';
+import { AdminGuard } from '../../../../components/admin/admin-guard';
 import { getAdminUsers, toggleBlockUser } from '../../../../lib/services/admin-portal.service';
 import type { AdminUserItem, UserRole, UserStatus } from '@legalhub/types';
 import { formatDate } from '@legalhub/utils';
@@ -110,7 +111,8 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/60">
+    <AdminGuard>
+      <div className="min-h-screen bg-slate-50/60">
       <Navbar />
       <AdminPortalNav />
 
@@ -382,7 +384,8 @@ export default function AdminUsersPage() {
         </Container>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </AdminGuard>
   );
 }

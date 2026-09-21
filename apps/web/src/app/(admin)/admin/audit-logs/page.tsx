@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AdminPortalNav } from '@/components/admin/admin-portal-nav';
+import { AdminGuard } from '@/components/admin/admin-guard';
 import type { AuditLog } from '@legalhub/types';
 
 export default function AdminAuditLogsPage() {
@@ -32,7 +33,8 @@ export default function AdminAuditLogsPage() {
   }, [actionFilter]);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans pb-16">
+    <AdminGuard>
+      <div className="min-h-screen bg-slate-900 text-slate-100 font-sans pb-16">
       {/* Header */}
       <header className="bg-slate-950 border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -191,5 +193,6 @@ export default function AdminAuditLogsPage() {
         </div>
       )}
     </div>
+  </AdminGuard>
   );
 }
