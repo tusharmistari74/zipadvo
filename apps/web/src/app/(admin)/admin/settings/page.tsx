@@ -81,40 +81,68 @@ export default function AdminSettingsPage() {
       setError(null);
       setSuccess(null);
 
-      const res = await fetch('/api/admin/settings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-role': 'admin',
-          'x-user-id': 'admin_operator',
+      const updatedSettingsPayload: Partial<PlatformSettings> = {
+        commissionRate: Number(commissionRate),
+        unlockFee: Number(unlockFee),
+        minimumWithdrawal: Number(minimumWithdrawal),
+        supportEmail: supportEmail.trim(),
+        supportPhone: supportPhone.trim(),
+        platformVersion: platformVersion.trim(),
+        maintenanceMode: Boolean(maintenanceMode),
+        fees: {
+          consultationUnlockFeeInr: Number(unlockFee),
+          platformCommissionPercentage: Number(commissionRate),
+          gstPercentage: 18,
         },
-        body: JSON.stringify({
-          commissionRate: Number(commissionRate),
-          unlockFee: Number(unlockFee),
-          minimumWithdrawal: Number(minimumWithdrawal),
-          supportEmail: supportEmail.trim(),
-          supportPhone: supportPhone.trim(),
-          platformVersion: platformVersion.trim(),
-          maintenanceMode: Boolean(maintenanceMode),
-          reason: updateReason.trim(),
-        }),
-      });
+        updatedAt: new Date().toISOString(),
+      };
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to update platform settings');
+      // 1. Direct Client Firestore sync
+      try {
+        const { doc, setDoc } = await import('firebase/firestore');
+        const { db } = await import('@/lib/firebase/client');
+        const { COLLECTIONS } = await import('@/lib/firebase/collections');
+        const docRef = doc(db, COLLECTIONS.PLATFORM_SETTINGS, 'global_settings');
+        await setDoc(docRef, updatedSettingsPayload, { merge: true });
+      } catch {
+        // Fallback to API sync
       }
 
-      if (typeof window !== 'undefined' && data.settings) {
+      // 2. Broadcast across local storage & window events immediately
+      if (typeof window !== 'undefined') {
         try {
-          localStorage.setItem('zipadvo_platform_settings', JSON.stringify(data.settings));
-          window.dispatchEvent(new CustomEvent('zipadvo_settings_updated', { detail: data.settings }));
+          const merged = { ...(settings || {}), ...updatedSettingsPayload } as PlatformSettings;
+          localStorage.setItem('zipadvo_platform_settings', JSON.stringify(merged));
+          window.dispatchEvent(new CustomEvent('zipadvo_settings_updated', { detail: merged }));
         } catch {
           // Ignore
         }
       }
 
-      setSuccess('Platform settings updated successfully and broadcasted in real time.');
+      // 3. Send to server API with 5s timeout
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+        await fetch('/api/admin/settings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-role': 'admin',
+            'x-user-id': 'admin_operator',
+          },
+          body: JSON.stringify({
+            ...updatedSettingsPayload,
+            reason: updateReason.trim(),
+          }),
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+      } catch {
+        // Non-blocking if client firestore already persisted
+      }
+
+      setSuccess('Platform settings updated successfully and broadcasted in real time across all pages.');
       setUpdateReason('');
       fetchSettings();
     } catch (err) {

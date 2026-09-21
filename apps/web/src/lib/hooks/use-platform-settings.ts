@@ -1,12 +1,13 @@
-'use client';
-
 import { useState, useEffect } from 'react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase/client';
+import { COLLECTIONS } from '../firebase/collections';
 import type { PlatformSettings } from '@legalhub/types';
 import { getPlatformSettings, DEFAULT_PLATFORM_SETTINGS } from '../services/settings.service';
 
 export function usePlatformSettings() {
   const [settings, setSettings] = useState<PlatformSettings>(DEFAULT_PLATFORM_SETTINGS);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // 1. Sync from localStorage on client mount if available
@@ -29,28 +30,85 @@ export function usePlatformSettings() {
       // Fallback to default
     }
 
-    // 2. Fetch fresh settings from Firestore / API
-    getPlatformSettings()
-      .then((s) => {
-        setSettings(s);
+    // 2. Fetch fresh settings from Public API
+    setLoading(true);
+    fetch('/api/platform-settings')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.settings) {
+          setSettings((prev) => ({
+            ...prev,
+            ...data.settings,
+            fees: {
+              ...prev.fees,
+              ...(data.settings.fees || {}),
+            },
+          }));
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('zipadvo_platform_settings', JSON.stringify(data.settings));
+          }
+        }
         setLoading(false);
       })
       .catch(() => {
-        setLoading(false);
+        getPlatformSettings()
+          .then((s) => {
+            setSettings(s);
+            setLoading(false);
+          })
+          .catch(() => {
+            setLoading(false);
+          });
       });
 
+    // 3. Real-Time Firestore Live Listener
+    let unsubscribeFirestore = () => {};
+    try {
+      const docRef = doc(db, COLLECTIONS.PLATFORM_SETTINGS, 'global_settings');
+      unsubscribeFirestore = onSnapshot(docRef, (snap) => {
+        if (snap.exists()) {
+          const liveData = snap.data() as Partial<PlatformSettings>;
+          setSettings((prev) => ({
+            ...prev,
+            ...liveData,
+            fees: {
+              ...prev.fees,
+              ...(liveData.fees || {}),
+            },
+          }));
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem('zipadvo_platform_settings', JSON.stringify({ ...DEFAULT_PLATFORM_SETTINGS, ...liveData }));
+            } catch {
+              // Ignore
+            }
+          }
+        }
+      }, () => {
+        // Silently handle offline/listener fallback
+      });
+    } catch {
+      // Ignore
+    }
+
+    // 4. Custom and Storage Events
     const handleUpdate = (event: Event) => {
       const customEvent = event as CustomEvent<PlatformSettings>;
       if (customEvent.detail) {
         setSettings(customEvent.detail);
       } else {
-        getPlatformSettings().then(setSettings);
+        getPlatformSettings().then(setSettings).catch(() => {});
       }
     };
 
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'zipadvo_platform_settings') {
-        getPlatformSettings().then(setSettings);
+      if (e.key === 'zipadvo_platform_settings' && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          setSettings((prev) => ({ ...prev, ...parsed }));
+        } catch {
+          // Ignore
+        }
       }
     };
 
@@ -58,6 +116,7 @@ export function usePlatformSettings() {
     window.addEventListener('storage', handleStorage);
 
     return () => {
+      unsubscribeFirestore();
       window.removeEventListener('zipadvo_settings_updated', handleUpdate);
       window.removeEventListener('storage', handleStorage);
     };
