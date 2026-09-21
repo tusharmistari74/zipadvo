@@ -51,7 +51,7 @@ export function Navbar() {
                   Verified
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 font-medium tracking-wide">
+              <p className="text-[10px] text-slate-500 font-medium tracking-wide hidden sm:block">
                 Verified Advocates & Property Registry Network
               </p>
             </div>
