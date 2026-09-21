@@ -5,35 +5,39 @@ import type { PlatformSettings } from '@legalhub/types';
 import { getPlatformSettings, DEFAULT_PLATFORM_SETTINGS } from '../services/settings.service';
 
 export function usePlatformSettings() {
-  const [settings, setSettings] = useState<PlatformSettings>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem('zipadvo_platform_settings');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          return {
-            ...DEFAULT_PLATFORM_SETTINGS,
-            ...parsed,
-            fees: {
-              ...DEFAULT_PLATFORM_SETTINGS.fees,
-              ...(parsed.fees || {}),
-            },
-          };
-        }
-      } catch {
-        // Fallback
-      }
-    }
-    return DEFAULT_PLATFORM_SETTINGS;
-  });
+  const [settings, setSettings] = useState<PlatformSettings>(DEFAULT_PLATFORM_SETTINGS);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Initial fetch from Firestore / API
-    getPlatformSettings().then((s) => {
-      setSettings(s);
-      setLoading(false);
-    });
+    // 1. Sync from localStorage on client mount if available
+    try {
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('zipadvo_platform_settings');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setSettings((prev) => ({
+            ...prev,
+            ...parsed,
+            fees: {
+              ...prev.fees,
+              ...(parsed.fees || {}),
+            },
+          }));
+        }
+      }
+    } catch {
+      // Fallback to default
+    }
+
+    // 2. Fetch fresh settings from Firestore / API
+    getPlatformSettings()
+      .then((s) => {
+        setSettings(s);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
 
     const handleUpdate = (event: Event) => {
       const customEvent = event as CustomEvent<PlatformSettings>;
