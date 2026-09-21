@@ -1,9 +1,13 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Container } from '@legalhub/ui';
 import { Scale, ShieldCheck, Mail, MapPin, Phone } from 'lucide-react';
+import { usePlatformSettings } from '../../lib/hooks/use-platform-settings';
 
 export function Footer() {
+  const { unlockFee, supportEmail, supportPhone } = usePlatformSettings();
   return (
     <footer className="border-t border-slate-200 bg-slate-900 text-slate-300">
       <Container className="py-12 lg:py-16">
@@ -28,14 +32,14 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-blue-400 shrink-0" />
-                <a href="mailto:zipadvo@gmail.com" className="hover:text-white transition-colors underline decoration-blue-500/50">
-                  zipadvo@gmail.com
+                <a href={`mailto:${supportEmail}`} className="hover:text-white transition-colors underline decoration-blue-500/50">
+                  {supportEmail}
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-emerald-400 shrink-0" />
-                <a href="tel:+917768942390" className="hover:text-white transition-colors font-semibold text-emerald-300">
-                  +91 77689 42390 (Helpline & WhatsApp)
+                <a href={`tel:${supportPhone.replace(/\s+/g, '')}`} className="hover:text-white transition-colors font-semibold text-emerald-300">
+                  {supportPhone} (Helpline & WhatsApp)
                 </a>
               </div>
             </div>
@@ -125,13 +129,13 @@ export function Footer() {
             <ShieldCheck className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
             <div>
               <span className="font-semibold text-slate-300">Bar Council of India Disclaimer: </span>
-              ZipAdvo is a technology intermediary platform and is not a law firm. As per the rules of the Bar Council of India, advocates are not permitted to solicit work or advertise. The platform facilitates discovery and appointment booking at the client&apos;s sole initiative. The ₹299 unlock fee is a technology facilitation fee for platform operations.
+              ZipAdvo is a technology intermediary platform and is not a law firm. As per the rules of the Bar Council of India, advocates are not permitted to solicit work or advertise. The platform facilitates discovery and appointment booking at the client&apos;s sole initiative. The ₹{unlockFee} unlock fee is a technology facilitation fee for platform operations.
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <p>© {new Date().getFullYear()} ZipAdvo Technologies Pvt. Ltd. All rights reserved.</p>
-            <p>24/7 Support: zipadvo@gmail.com • Helpline: +91 77689 42390</p>
+            <p>24/7 Support: {supportEmail} • Helpline: {supportPhone}</p>
           </div>
         </div>
       </Container>

@@ -1,8 +1,11 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Container, Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Badge, Rating, Avatar } from '@legalhub/ui';
 import { Navbar } from '../components/layout/navbar';
 import { Footer } from '../components/layout/footer';
+import { usePlatformSettings } from '../lib/hooks/use-platform-settings';
 import {
   ShieldCheck,
   Building2,
@@ -16,13 +19,8 @@ import {
   Award,
 } from 'lucide-react';
 
-export const metadata = {
-  title: 'ZipAdvo | Verified Property & Document Registration Advocates in Mumbai',
-  description:
-    'Connect with Bar Council verified property, conveyance, and registration advocates in Mumbai. Fixed ₹299 consultation unlock fee with encrypted document review.',
-};
-
 export default function HomePage() {
+  const { unlockFee } = usePlatformSettings();
   const sampleLawyers = [
     {
       id: 'adv_rajesh_mehta',
@@ -95,8 +93,8 @@ export default function HomePage() {
       a: 'Every advocate on our platform is individually verified against the Bar Council of Maharashtra and Goa registry using their Sanad number. We also verify court practice records, identity documents, and chamber office addresses.',
     },
     {
-      q: 'What does the ₹299 consultation unlock fee cover?',
-      a: 'The ₹299 facilitation fee unlocks the lawyer’s direct chamber contact details, reserves your priority consultation appointment slot, and provides access to the secure document vault.',
+      q: `What does the ₹${unlockFee} consultation unlock fee cover?`,
+      a: `The ₹${unlockFee} facilitation fee unlocks the lawyer’s direct chamber contact details, reserves your priority consultation appointment slot, and provides access to the secure document vault.`,
     },
     {
       q: 'Are my property documents kept secure?',
@@ -154,7 +152,7 @@ export default function HomePage() {
                 <p className="text-xs text-slate-400">Sanad Verified</p>
               </div>
               <div>
-                <p className="text-xl sm:text-2xl font-bold text-white font-mono">₹299</p>
+                <p className="text-xl sm:text-2xl font-bold text-white font-mono">₹{unlockFee}</p>
                 <p className="text-xs text-slate-400">Fixed Unlock Fee</p>
               </div>
               <div>
@@ -225,9 +223,9 @@ export default function HomePage() {
                 02
               </div>
               <CardHeader className="pt-4">
-                <CardTitle className="text-lg">Unlock for ₹299 & Share Dossier</CardTitle>
+                <CardTitle className="text-lg">Unlock for ₹{unlockFee} & Share Dossier</CardTitle>
                 <CardDescription>
-                  Pay the standard ₹299 facilitation fee to unlock advocate contact details and upload property deeds securely to your confidential vault.
+                  Pay the standard ₹{unlockFee} facilitation fee to unlock advocate contact details and upload property deeds securely to your confidential vault.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -340,7 +338,7 @@ export default function HomePage() {
                   <Rating value={lawyer.rating} reviewCount={lawyer.reviewCount} showText size="sm" />
                   <Link href={`/lawyers/${lawyer.id}`}>
                     <Button variant="primary" size="sm" className="bg-blue-600 hover:bg-blue-700">
-                      Consult (₹299)
+                      Consult (₹{unlockFee})
                     </Button>
                   </Link>
                 </CardContent>

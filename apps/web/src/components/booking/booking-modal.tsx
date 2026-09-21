@@ -28,6 +28,7 @@ import { ClientBookingCalendar } from './client-booking-calendar';
 import { DEFAULT_LAWYER_AVAILABILITY_CONFIG } from '../../lib/services/availability.service';
 import { createBooking } from '../../lib/services/booking.service';
 import { saveLocalAuthSession } from '../../lib/auth/auth-service';
+import { usePlatformSettings } from '../../lib/hooks/use-platform-settings';
 import type { UserProfile } from '@legalhub/types';
 import { formatINR } from '@legalhub/utils';
 
@@ -40,6 +41,7 @@ interface BookingModalProps {
 export function BookingModal({ lawyer, isOpen, onClose }: BookingModalProps) {
   const router = useRouter();
   const { user, profile } = useAuth();
+  const { unlockFee } = usePlatformSettings();
 
   // Step 1..4
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
@@ -505,7 +507,7 @@ export function BookingModal({ lawyer, isOpen, onClose }: BookingModalProps) {
               </div>
             </div>
 
-            {/* ₹299 Unlock Fee Transparency Callout */}
+            {/* Dynamic Unlock Fee Transparency Callout */}
             <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl space-y-1.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -514,10 +516,10 @@ export function BookingModal({ lawyer, isOpen, onClose }: BookingModalProps) {
                     Platform Contact & Slot Unlock Fee
                   </span>
                 </div>
-                <span className="text-sm font-bold text-emerald-900">₹299</span>
+                <span className="text-sm font-bold text-emerald-900">₹{unlockFee}</span>
               </div>
               <p className="text-[11px] text-emerald-800 leading-relaxed">
-                Paying ₹299 instantly reserves your appointment slot, reveals direct mobile & chamber coordinates, and sends your case briefing directly to the advocate.
+                Paying ₹{unlockFee} instantly reserves your appointment slot, reveals direct mobile & chamber coordinates, and sends your case briefing directly to the advocate.
               </p>
             </div>
           </div>

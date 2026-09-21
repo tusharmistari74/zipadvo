@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { formatINR } from '@legalhub/utils';
 import type { PublicLawyerProfile } from '../../lib/services/lawyer-profile.service';
+import { usePlatformSettings } from '../../lib/hooks/use-platform-settings';
 import { BookingModal } from '../booking/booking-modal';
 
 interface BookingUnlockCardProps {
@@ -18,7 +19,8 @@ interface BookingUnlockCardProps {
 
 export function BookingUnlockCard({ profile }: BookingUnlockCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const facilitationFee = 299;
+  const { unlockFee } = usePlatformSettings();
+  const facilitationFee = unlockFee;
 
   return (
     <div className="space-y-4 sticky top-24">

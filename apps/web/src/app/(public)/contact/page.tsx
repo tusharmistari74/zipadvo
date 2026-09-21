@@ -11,8 +11,10 @@ import {
 } from 'lucide-react';
 import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
+import { usePlatformSettings } from '../../../lib/hooks/use-platform-settings';
 
 export default function ContactPage() {
+  const { supportEmail, supportPhone } = usePlatformSettings();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -102,10 +104,10 @@ export default function ContactPage() {
                     <div>
                       <h3 className="text-sm font-bold text-slate-900">Email & Direct Helpline</h3>
                       <p className="text-xs text-slate-600 mt-1">
-                        General Support: <a href="mailto:zipadvo@gmail.com" className="text-blue-700 font-semibold hover:underline">zipadvo@gmail.com</a>
+                        General Support: <a href={`mailto:${supportEmail}`} className="text-blue-700 font-semibold hover:underline">{supportEmail}</a>
                       </p>
                       <p className="text-xs text-slate-600">
-                        Helpline / WhatsApp: <a href="tel:+917768942390" className="text-emerald-700 font-semibold hover:underline">+91 77689 42390</a>
+                        Helpline / WhatsApp: <a href={`tel:${supportPhone.replace(/\s+/g, '')}`} className="text-emerald-700 font-semibold hover:underline">{supportPhone}</a>
                       </p>
                     </div>
                   </CardContent>

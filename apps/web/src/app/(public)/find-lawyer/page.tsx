@@ -18,6 +18,7 @@ import {
 } from '@legalhub/ui';
 import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
+import { usePlatformSettings } from '../../../lib/hooks/use-platform-settings';
 import { Search, MapPin, Scale, ShieldCheck, Map, List, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import type { LawyerMarkerItem } from '../../../components/map/mumbai-lawyer-map';
@@ -149,6 +150,7 @@ const LAWYERS_CATALOG: LawyerMarkerItem[] = [
 ];
 
 export default function FindLawyerPage() {
+  const { unlockFee } = usePlatformSettings();
   const [selectedPractice, setSelectedPractice] = useState('all');
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -232,7 +234,7 @@ export default function FindLawyerPage() {
               </Button>
               <div className="inline-flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300">
                 <ShieldCheck className="h-4 w-4 text-blue-400 shrink-0" />
-                <span>Fixed ₹299 Unlock Fee</span>
+                <span>Fixed ₹{unlockFee} Unlock Fee</span>
               </div>
             </div>
           </div>
@@ -398,7 +400,7 @@ export default function FindLawyerPage() {
                       <div className="flex flex-col items-end justify-between self-stretch sm:border-l sm:border-slate-100 sm:pl-6 space-y-3 shrink-0">
                         <div className="text-right">
                           <Rating value={lawyer.rating} reviewCount={lawyer.reviewCount} showText size="sm" />
-                          <p className="text-xs text-slate-500 mt-1 font-medium">Unlock Fee: ₹299</p>
+                          <p className="text-xs text-slate-500 mt-1 font-medium">Unlock Fee: ₹{unlockFee}</p>
                         </div>
 
                         <Link href={`/lawyers/${lawyer.id}`}>
