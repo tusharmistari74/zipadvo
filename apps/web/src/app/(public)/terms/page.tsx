@@ -1,16 +1,15 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React from 'react';
 import { Container, Badge } from '@legalhub/ui';
 import { Scale, AlertCircle } from 'lucide-react';
 import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
-
-export const metadata: Metadata = {
-  title: 'Terms of Service | ZipAdvo - Intermediary Terms & Conditions',
-  description:
-    'Review the terms of service governing the use of ZipAdvo, a technology intermediary platform connecting clients with verified Mumbai advocates.',
-};
+import { usePlatformSettings } from '../../../lib/hooks/use-platform-settings';
 
 export default function TermsOfServicePage() {
+  const { unlockFee } = usePlatformSettings();
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -38,17 +37,21 @@ export default function TermsOfServicePage() {
         <Container>
           <div className="mx-auto max-w-3xl prose prose-slate text-sm sm:text-base leading-relaxed space-y-8">
             <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm">
-              <p className="font-semibold flex items-center gap-1.5 mb-1">
-                <AlertCircle className="h-4 w-4 text-amber-700 shrink-0" />
-                Statutory Disclosure Under Advocates Act, 1961
-              </p>
-              ZipAdvo is a technology intermediary platform and NOT a law firm. In accordance with Rule 36 of the Bar Council of India Rules, this platform does not solicit legal work, advertise legal services, or share professional fees with advocates.
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 text-amber-700 shrink-0 mt-0.5" />
+                <p>
+                  <strong>Important Notice:</strong> ZipAdvo is a technology facilitation platform and is not a law firm.
+                  We do not solicit legal work or provide legal advice directly.
+                </p>
+              </div>
             </div>
 
             <section className="space-y-3">
               <h2 className="font-serif text-xl font-bold text-slate-900">1. Acceptance of Terms</h2>
               <p className="text-slate-600">
-                By accessing or using ZipAdvo (the &quot;Platform&quot;), whether as a Client looking for legal verification or as a practicing Advocate, you agree to be bound by these Terms of Service. If you do not agree to these terms, you must not access or use the Platform.
+                By accessing, browsing, or utilizing the services provided by ZipAdvo (&quot;Platform&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;),
+                you (&quot;User&quot;, &quot;Client&quot;, or &quot;Advocate&quot;) agree to be bound by these Terms of Service. If you do not agree
+                to these terms, please do not use the platform.
               </p>
             </section>
 
@@ -65,13 +68,13 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="space-y-3">
-              <h2 className="font-serif text-xl font-bold text-slate-900">3. Facilitation Fee (₹299)</h2>
+              <h2 className="font-serif text-xl font-bold text-slate-900">3. Facilitation Fee (₹{unlockFee})</h2>
               <p className="text-slate-600">
-                To initiate a booking and unlock direct communication and encrypted document sharing with a verified advocate, Clients pay a one-time platform facilitation fee of ₹299 (inclusive of applicable GST).
+                To initiate a booking and unlock direct communication and encrypted document sharing with a verified advocate, Clients pay a one-time platform facilitation fee of ₹{unlockFee} (inclusive of applicable GST).
               </p>
               <ul className="list-disc pl-5 space-y-1 text-slate-600 text-sm">
-                <li>The ₹299 fee is solely for platform infrastructure, identity verification, and document vault hosting.</li>
-                <li>The ₹299 fee is NOT a legal consultation or retainership fee. Any professional fees for legal title verification, agreement drafting, or sub-registrar representation are settled directly between the Client and the Advocate.</li>
+                <li>The ₹{unlockFee} fee is solely for platform infrastructure, identity verification, and document vault hosting.</li>
+                <li>The ₹{unlockFee} fee is NOT a legal consultation or retainership fee. Any professional fees for legal title verification, agreement drafting, or sub-registrar representation are settled directly between the Client and the Advocate.</li>
               </ul>
             </section>
 

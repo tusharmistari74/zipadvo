@@ -1,4 +1,6 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
 import { Container, Button, Card, CardContent, CardHeader, CardTitle, Badge } from '@legalhub/ui';
 import {
@@ -14,19 +16,11 @@ import {
 } from 'lucide-react';
 import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
-
-export const metadata: Metadata = {
-  title: 'For Lawyers | Join ZipAdvo - Verified Advocate Network',
-  description:
-    'Join Mumbai’s dedicated property and conveyancing legal network. Connect with high-intent property buyers, manage clients seamlessly, and maintain 100% of your legal fees.',
-  openGraph: {
-    title: 'Join ZipAdvo as a Verified Property Advocate',
-    description:
-      'Connect with clients needing title search reports, sale deed drafting, and sub-registrar assistance in Mumbai. BCI-compliant platform with zero fee cuts.',
-  },
-};
+import { usePlatformSettings } from '../../../lib/hooks/use-platform-settings';
 
 export default function ForLawyersPage() {
+  const { unlockFee } = usePlatformSettings();
+
   const benefits = [
     {
       icon: Users,
@@ -92,7 +86,7 @@ export default function ForLawyersPage() {
   const faqs = [
     {
       q: 'Does ZipAdvo charge advocates a percentage of legal fees?',
-      a: 'No. ZipAdvo operates on a strict zero-commission model for advocate fees. Clients pay a small ₹299 facilitation unlock fee to the platform, while your professional consultation, drafting, and conveyance fees are settled directly between you and your client.',
+      a: `No. ZipAdvo operates on a strict zero-commission model for advocate fees. Clients pay a small ₹${unlockFee} facilitation unlock fee to the platform, while your professional consultation, drafting, and conveyance fees are settled directly between you and your client.`,
     },
     {
       q: 'How does the platform ensure compliance with Bar Council of India rules?',

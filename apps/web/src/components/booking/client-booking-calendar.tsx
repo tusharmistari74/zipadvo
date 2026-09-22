@@ -18,6 +18,7 @@ import {
   MUMBAI_TIMEZONE,
 } from '../../lib/services/availability.service';
 import { formatINR } from '@legalhub/utils';
+import { usePlatformSettings } from '../../lib/hooks/use-platform-settings';
 
 interface ClientBookingCalendarProps {
   lawyerName: string;
@@ -38,6 +39,7 @@ export function ClientBookingCalendar({
   selectedSlotId: initialSelectedSlotId,
   onSelectSlot,
 }: ClientBookingCalendarProps) {
+  const { unlockFee } = usePlatformSettings();
   const todayIST = useMemo(() => getIsoDateInIST(), []);
   const [selectedDate, setSelectedDate] = useState<string>(initialSelectedDate || todayIST);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlotItem | null>(null);
@@ -290,7 +292,7 @@ export function ClientBookingCalendar({
                   {formatDateHeader(selectedDate)} at {formatSlotDisplay(selectedSlot.startTime, selectedSlot.endTime)}
                 </p>
                 <p className="text-[11px] text-blue-700 mt-0.5">
-                  Regular Consultation Fee: {formatINR(consultationFeeInr)} (Unlocked for ₹299)
+                  Regular Consultation Fee: {formatINR(consultationFeeInr)} (Unlocked for ₹{unlockFee})
                 </p>
               </div>
             </div>

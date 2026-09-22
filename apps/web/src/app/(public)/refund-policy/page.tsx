@@ -1,17 +1,16 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
 import { Container, Card, CardContent, Badge, Button } from '@legalhub/ui';
 import { RefreshCw, CheckCircle2, XCircle } from 'lucide-react';
 import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
-
-export const metadata: Metadata = {
-  title: 'Refund Policy | ZipAdvo - ₹299 Facilitation Guarantee',
-  description:
-    'Review the transparent refund policy for ZipAdvo’s ₹299 platform facilitation fee. 100% money-back guarantee if an advocate is unresponsive within 24 hours.',
-};
+import { usePlatformSettings } from '../../../lib/hooks/use-platform-settings';
 
 export default function RefundPolicyPage() {
+  const { unlockFee } = usePlatformSettings();
+
   const eligibleScenarios = [
     {
       title: 'Advocate Unresponsiveness (> 24 Hours)',
@@ -42,7 +41,7 @@ export default function RefundPolicyPage() {
     },
     {
       title: 'Disagreement on Advocate’s Professional Fee',
-      desc: 'The ₹299 fee is solely for platform facilitation. Disagreement on the advocate’s independent fee quote for TSR or drafting is not grounds for a platform refund.',
+      desc: `The ₹${unlockFee} fee is solely for platform facilitation. Disagreement on the advocate’s independent fee quote for TSR or drafting is not grounds for a platform refund.`,
     },
     {
       title: 'Change of Mind After Receiving Contact',
@@ -79,10 +78,10 @@ export default function RefundPolicyPage() {
             {/* Overview */}
             <div className="space-y-3">
               <h2 className="font-serif text-xl font-bold text-slate-900">
-                1. Overview of the ₹299 Facilitation Fee
+                1. Overview of the ₹{unlockFee} Facilitation Fee
               </h2>
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                ZipAdvo charges a one-time facilitation unlock fee of ₹299 per lawyer match. This fee maintains our verified Bar Council directory, secures encrypted document storage, and covers direct connectivity. We are committed to a fair and prompt refund process if our service commitments are not met.
+                ZipAdvo charges a one-time facilitation unlock fee of ₹{unlockFee} per lawyer match. This fee maintains our verified Bar Council directory, secures encrypted document storage, and covers direct connectivity. We are committed to a fair and prompt refund process if our service commitments are not met.
               </p>
             </div>
 

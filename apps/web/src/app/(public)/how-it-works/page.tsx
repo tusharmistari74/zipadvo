@@ -1,4 +1,6 @@
-import type { Metadata } from 'next';
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
 import { Container, Button, Card, CardContent, CardHeader, CardTitle, Badge } from '@legalhub/ui';
 import {
@@ -15,19 +17,11 @@ import {
 } from 'lucide-react';
 import { Navbar } from '../../../components/layout/navbar';
 import { Footer } from '../../../components/layout/footer';
-
-export const metadata: Metadata = {
-  title: 'How It Works | ZipAdvo - Transparent Legal Facilitation',
-  description:
-    'Understand how ZipAdvo connects you with verified Mumbai advocates for property title checks, deed drafting, and sub-registrar conveyance in 4 simple steps.',
-  openGraph: {
-    title: 'How ZipAdvo Works - Property & Documentation Legal Services',
-    description:
-      'Step-by-step guide to finding verified advocates in Mumbai. Direct contact unlock for ₹299, secure document handling, and Sub-Registrar support.',
-  },
-};
+import { usePlatformSettings } from '../../../lib/hooks/use-platform-settings';
 
 export default function HowItWorksPage() {
+  const { unlockFee } = usePlatformSettings();
+
   const steps = [
     {
       number: '01',
@@ -44,9 +38,9 @@ export default function HowItWorksPage() {
     {
       number: '02',
       icon: Key,
-      title: 'Direct Advocate Unlock (₹299 Facilitation)',
+      title: `Direct Advocate Unlock (₹${unlockFee} Facilitation)`,
       description:
-        'Pay a nominal ₹299 platform facilitation fee to unlock the advocate’s direct mobile number, chamber address, email, and instant scheduling calendar.',
+        `Pay a nominal ₹${unlockFee} platform facilitation fee to unlock the advocate’s direct mobile number, chamber address, email, and instant scheduling calendar.`,
       features: [
         'Instant phone number & direct WhatsApp access',
         'Direct calendar booking without broker markups',
@@ -88,7 +82,7 @@ export default function HowItWorksPage() {
     {
       factor: 'Pricing & Fees',
       traditional: 'Hidden commissions, arbitrary broker markups, unpredictable quotes',
-      legalHub: '₹299 transparent facilitation unlock fee, direct client-advocate fee agreement',
+      legalHub: `₹${unlockFee} transparent facilitation unlock fee, direct client-advocate fee agreement`,
     },
     {
       factor: 'Document Security',
@@ -109,8 +103,8 @@ export default function HowItWorksPage() {
 
   const faqs = [
     {
-      q: 'What exactly does the ₹299 unlock fee cover?',
-      a: 'The ₹299 fee is an intermediary platform facilitation fee that covers identity verification, platform maintenance, encrypted document vault hosting, and direct contact unlocking. It is NOT legal advisory fees; legal consultation fees are agreed upon directly between you and your chosen advocate.',
+      q: `What exactly does the ₹${unlockFee} unlock fee cover?`,
+      a: `The ₹${unlockFee} fee is an intermediary platform facilitation fee that covers identity verification, platform maintenance, encrypted document vault hosting, and direct contact unlocking. It is NOT legal advisory fees; legal consultation fees are agreed upon directly between you and your chosen advocate.`,
     },
     {
       q: 'Are the lawyers on ZipAdvo employees of the platform?',

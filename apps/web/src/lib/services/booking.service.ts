@@ -13,6 +13,7 @@ import {
 } from '@legalhub/validation';
 import { reserveBookingSlot } from './availability.service';
 import { getPublicLawyerProfile } from './lawyer-profile.service';
+import { getUnlockFee } from './settings.service';
 
 // Allowed State Transition Matrix
 export const ALLOWED_TRANSITIONS: Record<string, BookingStatus[]> = {
@@ -198,12 +199,13 @@ export async function createBooking(
   }
 
   // 4. Construct Booking Document
+  const currentUnlockFee = await getUnlockFee();
   const initialTimeline: BookingTimelineEvent = {
     status: 'pending_payment',
     timestamp: now,
     actorUid: clientUid,
     actorRole: 'client',
-    notes: 'Consultation booking initiated. Awaiting ₹299 contact unlock payment.',
+    notes: `Consultation booking initiated. Awaiting ₹${currentUnlockFee} contact unlock payment.`,
   };
 
   const newBooking: Booking = {
@@ -224,7 +226,7 @@ export async function createBooking(
     consultationMode: data.consultationMode,
     status: 'pending_payment',
     timeline: [initialTimeline],
-    unlockAmountInr: 299,
+    unlockAmountInr: currentUnlockFee,
     consultationFeeInr: lawyerProfile.consultationFeeInr,
     chamberAddress: lawyerProfile.chamberAddress || `${lawyerProfile.locality}, ${lawyerProfile.city}`,
     uploadedDocumentIds: data.uploadedDocumentIds || [],
