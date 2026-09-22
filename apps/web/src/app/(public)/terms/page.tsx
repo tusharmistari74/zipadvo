@@ -67,14 +67,14 @@ export default function TermsOfServicePage() {
               </ul>
             </section>
 
-            <section className="space-y-3">
-              <h2 className="font-serif text-xl font-bold text-slate-900">3. Facilitation Fee (₹{unlockFee})</h2>
-              <p className="text-slate-600">
+            <section className="space-y-3" suppressHydrationWarning>
+              <h2 className="font-serif text-xl font-bold text-slate-900" suppressHydrationWarning>3. Facilitation Fee (₹{unlockFee})</h2>
+              <p className="text-slate-600" suppressHydrationWarning>
                 To initiate a booking and unlock direct communication and encrypted document sharing with a verified advocate, Clients pay a one-time platform facilitation fee of ₹{unlockFee} (inclusive of applicable GST).
               </p>
               <ul className="list-disc pl-5 space-y-1 text-slate-600 text-sm">
-                <li>The ₹{unlockFee} fee is solely for platform infrastructure, identity verification, and document vault hosting.</li>
-                <li>The ₹{unlockFee} fee is NOT a legal consultation or retainership fee. Any professional fees for legal title verification, agreement drafting, or sub-registrar representation are settled directly between the Client and the Advocate.</li>
+                <li suppressHydrationWarning>The ₹{unlockFee} fee is solely for platform infrastructure, identity verification, and document vault hosting.</li>
+                <li suppressHydrationWarning>The ₹{unlockFee} fee is NOT a legal consultation or retainership fee. Any professional fees for legal title verification, agreement drafting, or sub-registrar representation are settled directly between the Client and the Advocate.</li>
               </ul>
             </section>
 

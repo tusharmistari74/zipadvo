@@ -6,10 +6,12 @@ import type { PlatformSettings } from '@legalhub/types';
 import { getPlatformSettings, DEFAULT_PLATFORM_SETTINGS } from '../services/settings.service';
 
 export function usePlatformSettings() {
+  const [mounted, setMounted] = useState<boolean>(false);
   const [settings, setSettings] = useState<PlatformSettings>(DEFAULT_PLATFORM_SETTINGS);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setMounted(true);
     // 1. Sync from localStorage on client mount if available
     try {
       if (typeof window !== 'undefined') {
@@ -131,6 +133,8 @@ export function usePlatformSettings() {
   return {
     settings,
     loading,
+    mounted,
+    isMounted: mounted,
     unlockFee,
     commissionRate,
     supportEmail,

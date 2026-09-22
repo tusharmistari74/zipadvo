@@ -516,9 +516,9 @@ export function BookingModal({ lawyer, isOpen, onClose }: BookingModalProps) {
                     Platform Contact & Slot Unlock Fee
                   </span>
                 </div>
-                <span className="text-sm font-bold text-emerald-900">₹{unlockFee}</span>
+                <span className="text-sm font-bold text-emerald-900" suppressHydrationWarning>₹{unlockFee}</span>
               </div>
-              <p className="text-[11px] text-emerald-800 leading-relaxed">
+              <p className="text-[11px] text-emerald-800 leading-relaxed" suppressHydrationWarning>
                 Paying ₹{unlockFee} instantly reserves your appointment slot, reveals direct mobile & chamber coordinates, and sends your case briefing directly to the advocate.
               </p>
             </div>

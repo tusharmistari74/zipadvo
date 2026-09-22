@@ -31,7 +31,7 @@ export function BookingUnlockCard({ profile }: BookingUnlockCardProps) {
             <Badge variant="navy" className="bg-slate-800 text-blue-300 border-slate-700">
               Facilitation Unlock
             </Badge>
-            <span className="font-serif text-2xl font-bold text-white">
+            <span className="font-serif text-2xl font-bold text-white" suppressHydrationWarning>
               {formatINR(facilitationFee)}
             </span>
           </div>
@@ -81,7 +81,7 @@ export function BookingUnlockCard({ profile }: BookingUnlockCardProps) {
           <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1">
             <div className="flex items-center justify-between font-semibold text-slate-900">
               <span>Advocate Consultation Fee:</span>
-              <span>{formatINR(profile.consultationFeeInr)}</span>
+              <span suppressHydrationWarning>{formatINR(profile.consultationFeeInr)}</span>
             </div>
             <p className="text-[11px] text-slate-500">
               Agreed and paid directly to the advocate. Zero platform commission.
@@ -97,6 +97,7 @@ export function BookingUnlockCard({ profile }: BookingUnlockCardProps) {
               onClick={() => setIsModalOpen(true)}
               rightIcon={<ArrowRight className="h-4 w-4" />}
               className="shadow-sm font-semibold bg-emerald-600 hover:bg-emerald-700 border-none"
+              suppressHydrationWarning
             >
               Book & Unlock for {formatINR(facilitationFee)}
             </Button>

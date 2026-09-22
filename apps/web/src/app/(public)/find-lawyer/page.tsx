@@ -232,9 +232,9 @@ export default function FindLawyerPage() {
               >
                 {showMap ? 'Hide Map' : 'Show Map'}
               </Button>
-              <div className="inline-flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300">
+              <div className="inline-flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300" suppressHydrationWarning>
                 <ShieldCheck className="h-4 w-4 text-blue-400 shrink-0" />
-                <span>Fixed ₹{unlockFee} Unlock Fee</span>
+                <span suppressHydrationWarning>Fixed ₹{unlockFee} Unlock Fee</span>
               </div>
             </div>
           </div>
@@ -400,7 +400,7 @@ export default function FindLawyerPage() {
                       <div className="flex flex-col items-end justify-between self-stretch sm:border-l sm:border-slate-100 sm:pl-6 space-y-3 shrink-0">
                         <div className="text-right">
                           <Rating value={lawyer.rating} reviewCount={lawyer.reviewCount} showText size="sm" />
-                          <p className="text-xs text-slate-500 mt-1 font-medium">Unlock Fee: ₹{unlockFee}</p>
+                          <p className="text-xs text-slate-500 mt-1 font-medium" suppressHydrationWarning>Unlock Fee: ₹{unlockFee}</p>
                         </div>
 
                         <Link href={`/lawyers/${lawyer.id}`}>

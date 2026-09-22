@@ -76,11 +76,11 @@ export default function RefundPolicyPage() {
         <Container>
           <div className="mx-auto max-w-3xl space-y-10">
             {/* Overview */}
-            <div className="space-y-3">
-              <h2 className="font-serif text-xl font-bold text-slate-900">
+            <div className="space-y-3" suppressHydrationWarning>
+              <h2 className="font-serif text-xl font-bold text-slate-900" suppressHydrationWarning>
                 1. Overview of the ₹{unlockFee} Facilitation Fee
               </h2>
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed" suppressHydrationWarning>
                 ZipAdvo charges a one-time facilitation unlock fee of ₹{unlockFee} per lawyer match. This fee maintains our verified Bar Council directory, secures encrypted document storage, and covers direct connectivity. We are committed to a fair and prompt refund process if our service commitments are not met.
               </p>
             </div>
@@ -117,8 +117,8 @@ export default function RefundPolicyPage() {
                 {ineligibleScenarios.map((sc, i) => (
                   <Card key={i} className="border-slate-200 bg-slate-50/60">
                     <CardContent className="p-4 space-y-1">
-                      <h3 className="text-sm font-bold text-slate-900">{sc.title}</h3>
-                      <p className="text-xs text-slate-600">{sc.desc}</p>
+                      <h3 className="text-sm font-bold text-slate-900" suppressHydrationWarning>{sc.title}</h3>
+                      <p className="text-xs text-slate-600" suppressHydrationWarning>{sc.desc}</p>
                     </CardContent>
                   </Card>
                 ))}

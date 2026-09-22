@@ -255,8 +255,8 @@ export default function ForLawyersPage() {
               {faqs.map((faq, i) => (
                 <Card key={i} className="border-slate-200 bg-white shadow-xs">
                   <CardContent className="p-6 space-y-2">
-                    <h3 className="text-base font-bold text-slate-900">{faq.q}</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">{faq.a}</p>
+                    <h3 className="text-base font-bold text-slate-900" suppressHydrationWarning>{faq.q}</h3>
+                    <p className="text-sm text-slate-600 leading-relaxed" suppressHydrationWarning>{faq.a}</p>
                   </CardContent>
                 </Card>
               ))}

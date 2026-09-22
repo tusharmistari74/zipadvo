@@ -32,13 +32,13 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-blue-400 shrink-0" />
-                <a href={`mailto:${supportEmail}`} className="hover:text-white transition-colors underline decoration-blue-500/50">
+                <a href={`mailto:${supportEmail}`} suppressHydrationWarning className="hover:text-white transition-colors underline decoration-blue-500/50">
                   {supportEmail}
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-emerald-400 shrink-0" />
-                <a href={`tel:${supportPhone.replace(/\s+/g, '')}`} className="hover:text-white transition-colors font-semibold text-emerald-300">
+                <a href={`tel:${supportPhone.replace(/\s+/g, '')}`} suppressHydrationWarning className="hover:text-white transition-colors font-semibold text-emerald-300">
                   {supportPhone} (Helpline & WhatsApp)
                 </a>
               </div>
@@ -125,17 +125,17 @@ export function Footer() {
 
         {/* Regulatory Disclaimer */}
         <div className="mt-12 border-t border-slate-800 pt-8 space-y-4">
-          <div className="flex items-start gap-2.5 rounded-lg bg-slate-950 p-4 border border-slate-800 text-xs text-slate-400 leading-relaxed">
+          <div className="flex items-start gap-2.5 rounded-lg bg-slate-950 p-4 border border-slate-800 text-xs text-slate-400 leading-relaxed" suppressHydrationWarning>
             <ShieldCheck className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
-            <div>
+            <div suppressHydrationWarning>
               <span className="font-semibold text-slate-300">Bar Council of India Disclaimer: </span>
               ZipAdvo is a technology intermediary platform and is not a law firm. As per the rules of the Bar Council of India, advocates are not permitted to solicit work or advertise. The platform facilitates discovery and appointment booking at the client&apos;s sole initiative. The ₹{unlockFee} unlock fee is a technology facilitation fee for platform operations.
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-            <p>© {new Date().getFullYear()} ZipAdvo Technologies Pvt. Ltd. All rights reserved.</p>
-            <p>24/7 Support: {supportEmail} • Helpline: {supportPhone}</p>
+            <p suppressHydrationWarning>© {new Date().getFullYear()} ZipAdvo Technologies Pvt. Ltd. All rights reserved.</p>
+            <p suppressHydrationWarning>24/7 Support: {supportEmail} • Helpline: {supportPhone}</p>
           </div>
         </div>
       </Container>

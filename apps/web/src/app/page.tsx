@@ -152,7 +152,7 @@ export default function HomePage() {
                 <p className="text-xs text-slate-400">Sanad Verified</p>
               </div>
               <div>
-                <p className="text-xl sm:text-2xl font-bold text-white font-mono">₹{unlockFee}</p>
+                <p className="text-xl sm:text-2xl font-bold text-white font-mono" suppressHydrationWarning>₹{unlockFee}</p>
                 <p className="text-xs text-slate-400">Fixed Unlock Fee</p>
               </div>
               <div>
@@ -223,8 +223,8 @@ export default function HomePage() {
                 02
               </div>
               <CardHeader className="pt-4">
-                <CardTitle className="text-lg">Unlock for ₹{unlockFee} & Share Dossier</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg" suppressHydrationWarning>Unlock for ₹{unlockFee} & Share Dossier</CardTitle>
+                <CardDescription suppressHydrationWarning>
                   Pay the standard ₹{unlockFee} facilitation fee to unlock advocate contact details and upload property deeds securely to your confidential vault.
                 </CardDescription>
               </CardHeader>
@@ -337,7 +337,7 @@ export default function HomePage() {
                 <CardContent className="pt-0 border-t border-slate-100 mt-2 flex items-center justify-between">
                   <Rating value={lawyer.rating} reviewCount={lawyer.reviewCount} showText size="sm" />
                   <Link href={`/lawyers/${lawyer.id}`}>
-                    <Button variant="primary" size="sm" className="bg-blue-600 hover:bg-blue-700">
+                    <Button variant="primary" size="sm" className="bg-blue-600 hover:bg-blue-700" suppressHydrationWarning>
                       Consult (₹{unlockFee})
                     </Button>
                   </Link>
@@ -394,11 +394,11 @@ export default function HomePage() {
             {faqs.map((faq, i) => (
               <Card key={i} className="border-slate-200">
                 <CardHeader>
-                  <CardTitle className="text-base font-semibold text-slate-900 flex items-start gap-2.5">
+                  <CardTitle className="text-base font-semibold text-slate-900 flex items-start gap-2.5" suppressHydrationWarning>
                     <HelpCircle className="h-5 w-5 text-blue-700 shrink-0 mt-0.5" />
-                    <span>{faq.q}</span>
+                    <span suppressHydrationWarning>{faq.q}</span>
                   </CardTitle>
-                  <CardDescription className="text-sm text-slate-600 pl-7 pt-1 leading-relaxed">
+                  <CardDescription className="text-sm text-slate-600 pl-7 pt-1 leading-relaxed" suppressHydrationWarning>
                     {faq.a}
                   </CardDescription>
                 </CardHeader>

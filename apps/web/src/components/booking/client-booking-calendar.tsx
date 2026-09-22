@@ -291,7 +291,7 @@ export function ClientBookingCalendar({
                 <p className="text-sm font-bold text-blue-950">
                   {formatDateHeader(selectedDate)} at {formatSlotDisplay(selectedSlot.startTime, selectedSlot.endTime)}
                 </p>
-                <p className="text-[11px] text-blue-700 mt-0.5">
+                <p className="text-[11px] text-blue-700 mt-0.5" suppressHydrationWarning>
                   Regular Consultation Fee: {formatINR(consultationFeeInr)} (Unlocked for ₹{unlockFee})
                 </p>
               </div>
