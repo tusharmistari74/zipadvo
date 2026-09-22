@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Card, Badge, Rating, Button, Avatar } from '@legalhub/ui';
-import { MapPin, Navigation, Scale, ShieldCheck, ChevronRight, X, Compass, CheckCircle2 } from 'lucide-react';
+import { MapPin, Navigation, Scale, ShieldCheck, ChevronRight, X, Compass, CheckCircle2, Layers, Map as MapIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export interface LawyerMarkerItem {
@@ -110,6 +110,51 @@ const MUMBAI_COURT_HUBS = [
   },
 ];
 
+// Dark mode map theme for Google Maps styling
+const GOOGLE_MAPS_DARK_STYLE = [
+  { elementType: 'geometry', stylers: [{ color: '#0f172a' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#0f172a' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#94a3b8' }] },
+  {
+    featureType: 'administrative.locality',
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#38bdf8' }],
+  },
+  {
+    featureType: 'poi',
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#64748b' }],
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [{ color: '#1e293b' }],
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#334155' }],
+  },
+  {
+    featureType: 'road',
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#cbd5e1' }],
+  },
+  {
+    featureType: 'water',
+    elementType: 'geometry',
+    stylers: [{ color: '#0284c7' }, { lightness: -60 }],
+  },
+  {
+    featureType: 'water',
+    elementType: 'labels.text.fill',
+    stylers: [{ color: '#38bdf8' }],
+  },
+];
+
+const GOOGLE_MAPS_API_KEY =
+  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyArMH1TV9RKOMFm-69ckReSUvKphw2sUwQ';
+
 export function MumbaiLawyerMap({
   lawyers,
   selectedRegion = 'all',
@@ -122,6 +167,41 @@ export function MumbaiLawyerMap({
   const [isLocating, setIsLocating] = useState(false);
   const [locationStatus, setLocationStatus] = useState<string | null>(null);
   const [maxDistanceKm, setMaxDistanceKm] = useState<number | null>(null);
+  const [mapMode, setMapMode] = useState<'google' | 'cluster'>('google');
+  const [isGoogleMapsLoaded, setIsGoogleMapsLoaded] = useState(false);
+
+  const googleMapContainerRef = useRef<HTMLDivElement | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const googleMapInstanceRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const markersRef = useRef<any[]>([]);
+
+  // Load Google Maps JavaScript API
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((window as any).google?.maps) {
+      setIsGoogleMapsLoaded(true);
+      return;
+    }
+
+    const scriptId = 'google-maps-script-zipadvo';
+    if (document.getElementById(scriptId)) return;
+
+    const script = document.createElement('script');
+    script.id = scriptId;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places,geometry`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      setIsGoogleMapsLoaded(true);
+    };
+    script.onerror = () => {
+      setMapMode('cluster');
+    };
+    document.head.appendChild(script);
+  }, []);
 
   // Auto-request or user-triggered geolocation
   const handleLocateClient = () => {
@@ -139,12 +219,21 @@ export function MumbaiLawyerMap({
         setIsLocating(false);
         setLocationStatus('GPS Locked: Showing nearest advocates & chambers');
         setMaxDistanceKm(25); // Default to 25km nearby radius
+
+        if (googleMapInstanceRef.current) {
+          googleMapInstanceRef.current.panTo(coords);
+          googleMapInstanceRef.current.setZoom(13);
+        }
       },
       () => {
         // Fallback to Central Mumbai (Bandra / BKC)
-        setUserLocation({ lat: 19.0596, lng: 72.8295 });
+        const fallback = { lat: 19.0596, lng: 72.8295 };
+        setUserLocation(fallback);
         setIsLocating(false);
         setLocationStatus('Defaulted to Bandra / Central Mumbai region.');
+        if (googleMapInstanceRef.current) {
+          googleMapInstanceRef.current.panTo(fallback);
+        }
       },
       { timeout: 8000, enableHighAccuracy: true }
     );
@@ -185,6 +274,103 @@ export function MumbaiLawyerMap({
     return list;
   }, [activeHub, selectedRegion, lawyers, userLocation, maxDistanceKm]);
 
+  // Initialize or update Google Maps instance and markers
+  useEffect(() => {
+    if (!isGoogleMapsLoaded || mapMode !== 'google' || !googleMapContainerRef.current) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const google = (window as any).google;
+    if (!google?.maps) return;
+
+    if (!googleMapInstanceRef.current) {
+      googleMapInstanceRef.current = new google.maps.Map(googleMapContainerRef.current, {
+        center: { lat: 19.076, lng: 72.8777 },
+        zoom: 11,
+        styles: GOOGLE_MAPS_DARK_STYLE,
+        disableDefaultUI: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        streetViewControl: false,
+        fullscreenControl: true,
+      });
+    }
+
+    const map = googleMapInstanceRef.current;
+
+    // Clear previous markers
+    markersRef.current.forEach((m) => m.setMap(null));
+    markersRef.current = [];
+
+    // Add Court Hubs Markers
+    filteredHubs.forEach((hub) => {
+      const marker = new google.maps.Marker({
+        position: { lat: hub.lat, lng: hub.lng },
+        map,
+        title: hub.name,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 10,
+          fillColor: '#3b82f6',
+          fillOpacity: 0.9,
+          strokeColor: '#ffffff',
+          strokeWeight: 2,
+        },
+      });
+
+      marker.addListener('click', () => {
+        setActiveHub(hub.id);
+        const firstLawyer = lawyers.find((l) => l.region === hub.region);
+        if (firstLawyer) {
+          setActiveLawyer(firstLawyer);
+          if (onSelectLawyer) onSelectLawyer(firstLawyer);
+        }
+      });
+
+      markersRef.current.push(marker);
+    });
+
+    // Add Lawyer Markers
+    visibleLawyers.forEach((lawyer) => {
+      const marker = new google.maps.Marker({
+        position: { lat: lawyer.lat, lng: lawyer.lng },
+        map,
+        title: lawyer.name,
+        icon: {
+          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+          scale: 6,
+          fillColor: '#10b981',
+          fillOpacity: 1,
+          strokeColor: '#0f172a',
+          strokeWeight: 1.5,
+        },
+      });
+
+      marker.addListener('click', () => {
+        setActiveLawyer(lawyer);
+        if (onSelectLawyer) onSelectLawyer(lawyer);
+      });
+
+      markersRef.current.push(marker);
+    });
+
+    // Add User Location Marker if available
+    if (userLocation) {
+      const userMarker = new google.maps.Marker({
+        position: userLocation,
+        map,
+        title: 'Your Location',
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          fillColor: '#ec4899',
+          fillOpacity: 1,
+          strokeColor: '#ffffff',
+          strokeWeight: 2,
+        },
+      });
+      markersRef.current.push(userMarker);
+    }
+  }, [isGoogleMapsLoaded, mapMode, filteredHubs, visibleLawyers, userLocation, lawyers, onSelectLawyer]);
+
   // Select first lawyer by default if none active
   useEffect(() => {
     if (!activeLawyer && visibleLawyers.length > 0) {
@@ -201,9 +387,36 @@ export function MumbaiLawyerMap({
           <span className="text-xs font-bold tracking-wider uppercase text-slate-200">
             ZipAdvo Real-Life Mumbai Jurisdiction Map
           </span>
+          <Badge variant="brand" size="sm" className="hidden sm:inline-flex bg-blue-900/60 text-blue-300 border-blue-700">
+            Google Maps Powered
+          </Badge>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Map Style Toggle */}
+          <div className="inline-flex rounded-lg bg-slate-800 p-0.5 border border-slate-700">
+            <button
+              type="button"
+              onClick={() => setMapMode('google')}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
+                mapMode === 'google' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <MapIcon className="h-3 w-3" />
+              <span>Google Map</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMapMode('cluster')}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
+                mapMode === 'cluster' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Layers className="h-3 w-3" />
+              <span>Court Hubs</span>
+            </button>
+          </div>
+
           {/* Locate Me GPS CTA */}
           <button
             type="button"
@@ -212,12 +425,12 @@ export function MumbaiLawyerMap({
             className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 text-xs font-semibold transition-all focus:outline-none"
           >
             <Compass className={`h-3.5 w-3.5 ${isLocating ? 'animate-spin' : 'text-blue-400'}`} />
-            <span>{isLocating ? 'Locating...' : userLocation ? 'Nearby Advocates Active' : '📍 Find Lawyers Near Me'}</span>
+            <span>{isLocating ? 'Locating...' : userLocation ? 'Nearby Active' : '📍 Locate Me'}</span>
           </button>
 
           <div className="flex items-center gap-1.5 text-xs text-slate-400 pl-2">
             <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>{visibleLawyers.length} Verified Advocates</span>
+            <span>{visibleLawyers.length} Advocates</span>
           </div>
         </div>
       </div>
@@ -257,65 +470,80 @@ export function MumbaiLawyerMap({
       )}
 
       {/* Interactive Map Visual Stage */}
-      <div className="relative min-h-[380px] sm:min-h-[420px] bg-radial from-slate-900 to-slate-950 p-6 flex flex-col justify-between select-none">
-        {/* Mumbai Coastline & Geographic Watermark Grid */}
-        <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]" />
-
-        {/* Court Cluster Nodes (SVG / CSS Absolute Pinning) */}
-        <div className="relative w-full h-[320px] max-w-2xl mx-auto my-auto">
-          {filteredHubs.map((hub) => {
-            const isSelected = activeHub === hub.id;
-            const distance = userLocation ? calculateDistanceKm(userLocation.lat, userLocation.lng, hub.lat, hub.lng) : null;
-
-            return (
-              <div
-                key={hub.id}
-                style={{ left: `${hub.x}%`, top: `${hub.y}%` }}
-                className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10"
-                onClick={() => {
-                  setActiveHub(isSelected ? null : hub.id);
-                  const firstLawyer = lawyers.find((l) => l.region === hub.region);
-                  if (firstLawyer) {
-                    setActiveLawyer(firstLawyer);
-                    if (onSelectLawyer) onSelectLawyer(firstLawyer);
-                  }
-                }}
-              >
-                {/* Radar Ring */}
-                <span
-                  className={`absolute -inset-2 rounded-full opacity-75 transition-all ${
-                    isSelected ? 'bg-blue-500/40 animate-ping' : 'group-hover:bg-blue-400/20'
-                  }`}
-                />
-
-                {/* Hub Marker Badge */}
-                <div
-                  className={`relative flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shadow-lg transition-all ${
-                    isSelected
-                      ? 'bg-blue-600 text-white ring-2 ring-blue-300 scale-105'
-                      : 'bg-slate-800/90 text-slate-200 border border-slate-700 group-hover:border-blue-400 group-hover:bg-slate-800'
-                  }`}
-                >
-                  <Scale className="h-3 w-3 text-blue-400" />
-                  <span className="truncate max-w-[120px] sm:max-w-[170px]">{hub.name.split('&')[0]}</span>
-                  {distance !== null ? (
-                    <span className="bg-emerald-950 text-emerald-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">
-                      {distance} km
-                    </span>
-                  ) : (
-                    <span className="bg-blue-950/80 text-blue-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">
-                      {hub.count}
-                    </span>
-                  )}
-                </div>
+      <div className="relative min-h-[380px] sm:min-h-[440px] bg-slate-950 flex flex-col justify-between select-none">
+        {/* Google Maps Container */}
+        {mapMode === 'google' ? (
+          <div className="relative w-full h-[380px] sm:h-[440px]">
+            <div ref={googleMapContainerRef} className="w-full h-full rounded-b-lg" />
+            {!isGoogleMapsLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-slate-900/90 text-slate-300 text-sm">
+                <Compass className="h-5 w-5 animate-spin mr-2 text-blue-400" />
+                Loading Interactive Mumbai Map...
               </div>
-            );
-          })}
-        </div>
+            )}
+          </div>
+        ) : (
+          <div className="relative min-h-[380px] sm:min-h-[420px] bg-radial from-slate-900 to-slate-950 p-6 flex flex-col justify-between">
+            {/* Mumbai Coastline & Geographic Watermark Grid */}
+            <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:20px_20px]" />
+
+            {/* Court Cluster Nodes (SVG / CSS Absolute Pinning) */}
+            <div className="relative w-full h-[320px] max-w-2xl mx-auto my-auto">
+              {filteredHubs.map((hub) => {
+                const isSelected = activeHub === hub.id;
+                const distance = userLocation ? calculateDistanceKm(userLocation.lat, userLocation.lng, hub.lat, hub.lng) : null;
+
+                return (
+                  <div
+                    key={hub.id}
+                    style={{ left: `${hub.x}%`, top: `${hub.y}%` }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer z-10"
+                    onClick={() => {
+                      setActiveHub(isSelected ? null : hub.id);
+                      const firstLawyer = lawyers.find((l) => l.region === hub.region);
+                      if (firstLawyer) {
+                        setActiveLawyer(firstLawyer);
+                        if (onSelectLawyer) onSelectLawyer(firstLawyer);
+                      }
+                    }}
+                  >
+                    {/* Radar Ring */}
+                    <span
+                      className={`absolute -inset-2 rounded-full opacity-75 transition-all ${
+                        isSelected ? 'bg-blue-500/40 animate-ping' : 'group-hover:bg-blue-400/20'
+                      }`}
+                    />
+
+                    {/* Hub Marker Badge */}
+                    <div
+                      className={`relative flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shadow-lg transition-all ${
+                        isSelected
+                          ? 'bg-blue-600 text-white ring-2 ring-blue-300 scale-105'
+                          : 'bg-slate-800/90 text-slate-200 border border-slate-700 group-hover:border-blue-400 group-hover:bg-slate-800'
+                      }`}
+                    >
+                      <Scale className="h-3 w-3 text-blue-400" />
+                      <span className="truncate max-w-[120px] sm:max-w-[170px]">{hub.name.split('&')[0]}</span>
+                      {distance !== null ? (
+                        <span className="bg-emerald-950 text-emerald-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">
+                          {distance} km
+                        </span>
+                      ) : (
+                        <span className="bg-blue-950/80 text-blue-300 text-[10px] px-1.5 py-0.2 rounded-full font-mono">
+                          {hub.count}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Selected Hub / Advocate Detail Floating Overlay */}
         {activeLawyer && (
-          <div className="relative z-20 mt-4 rounded-xl border border-slate-700 bg-slate-900/95 p-4 backdrop-blur-md transition-all shadow-xl animate-in fade-in slide-in-from-bottom-2">
+          <div className="relative z-20 m-4 rounded-xl border border-slate-700 bg-slate-900/95 p-4 backdrop-blur-md transition-all shadow-xl animate-in fade-in slide-in-from-bottom-2">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-3">
                 <Avatar name={activeLawyer.name} size="md" status="online" />
@@ -365,21 +593,26 @@ export function MumbaiLawyerMap({
         )}
 
         {/* Bottom Legend */}
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-t border-slate-800/80 pt-3 mt-2">
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 border-t border-slate-800/80 px-4 py-3 bg-slate-950/90">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-blue-500" />
-              <span>High Court & District Hubs</span>
+              <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
+              <span>Court Cluster Hubs</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              <span>Verified Bar Council Advocates</span>
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              <span>Verified Advocates</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-pink-500" />
+              <span>Your GPS Pin</span>
             </span>
           </div>
-          <span>Click any court cluster or use &quot;Find Lawyers Near Me&quot;</span>
+          <span>Toggle between Google Map & Court Hubs schematic view</span>
         </div>
       </div>
     </Card>
   );
 }
+
 
