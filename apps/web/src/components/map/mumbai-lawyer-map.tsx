@@ -187,20 +187,24 @@ export function MumbaiLawyerMap({
     }
 
     const scriptId = 'google-maps-script-zipadvo';
-    if (document.getElementById(scriptId)) return;
+    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = scriptId;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places,geometry`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
 
-    const script = document.createElement('script');
-    script.id = scriptId;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places,geometry`;
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
+    const handleLoad = () => {
       setIsGoogleMapsLoaded(true);
     };
-    script.onerror = () => {
-      setMapMode('cluster');
+
+    script.addEventListener('load', handleLoad);
+    return () => {
+      script?.removeEventListener('load', handleLoad);
     };
-    document.head.appendChild(script);
   }, []);
 
   // Auto-request or user-triggered geolocation
@@ -473,13 +477,15 @@ export function MumbaiLawyerMap({
       <div className="relative min-h-[380px] sm:min-h-[440px] bg-slate-950 flex flex-col justify-between select-none">
         {/* Google Maps Container */}
         {mapMode === 'google' ? (
-          <div className="relative w-full h-[380px] sm:h-[440px]">
+          <div className="relative w-full h-[380px] sm:h-[440px] bg-slate-950">
             <div ref={googleMapContainerRef} className="w-full h-full rounded-b-lg" />
             {!isGoogleMapsLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-slate-900/90 text-slate-300 text-sm">
-                <Compass className="h-5 w-5 animate-spin mr-2 text-blue-400" />
-                Loading Interactive Mumbai Map...
-              </div>
+              <iframe
+                title="ZipAdvo Mumbai Legal Hub Google Map"
+                src={`https://maps.google.com/maps?q=${activeLawyer ? `${activeLawyer.lat},${activeLawyer.lng}` : '19.0760,72.8777'}&hl=en&z=12&output=embed`}
+                className="w-full h-full border-0 opacity-90 filter contrast-125"
+                loading="lazy"
+              />
             )}
           </div>
         ) : (
